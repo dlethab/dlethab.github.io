@@ -2,11 +2,15 @@
 // Coordinates are percentages in a 100(w) x 150(h) field (0,0 top-left)
 // Badge = short position label used above each dot
 
+import ericssonLogo from "../assets/logos/ericsson.png";
+import chartbeatLogo from "../assets/logos/chartbeat.png";
+import thermoLogo from "../assets/logos/thermofisher.png";
+
 export const manager = {
   id: "manager",
-  label: "Manager — Dlet Habtemariam",
+  label: "Dlet Habtemariam",
   details:
-    "Software engineer. Experiences: Chartbeat, Ericsson, Thermo Fisher. Projects: Dial In, Soccer Site, UTD NSBE site, iOS Music Theme. Leadership: NSBE. HackNY Fellow.",
+    "Dlet Hab desc",
   x: 92,
   y: 6,
   badge: "MGR",
@@ -31,6 +35,7 @@ const FWD_LW_ERICSSON = {
   badge: "LW",
   color: "bg-rose-500",
   icon: "🏢",
+  logo: ericssonLogo,
   // dates: "",
   // tools: "GitLab CI, Docker, K8s, Helm, Kafka, Postgres, Allure",
 };
@@ -45,6 +50,7 @@ const FWD_ST_CHARTBEAT = {
   badge: "ST",
   color: "bg-indigo-500",
   icon: "⚽",
+  logo: chartbeatLogo,
   // dates: "",
   // tools: "Python, Kafka, Grafana, Prometheus",
 };
@@ -59,6 +65,7 @@ const FWD_RW_THERMO = {
   badge: "RW",
   color: "bg-emerald-500",
   icon: "🧪",
+  logo: thermoLogo,
   // dates: "",
   // tools: "Celonis, Python, SQL",
 };
@@ -128,7 +135,7 @@ const DEF_LB_NSBE = {
   details:
     "Sponsorships, mentorship nights, workshops; member engagement & study nights programming.",
   x: 20,
-  y: 70,
+  y: 65,
   badge: "LB",
   color: "bg-teal-500",
   icon: "🤝",
@@ -161,7 +168,7 @@ const DEF_RB_TEMP = {
   label: "RB — Temporary (Org/Award)",
   details: "Placeholder for additional org/award.",
   x: 80,
-  y: 70,
+  y: 65,
   badge: "RB",
   color: "bg-zinc-600",
   icon: "🏅",
@@ -215,11 +222,12 @@ export const bench = [
   // keep the 4th midfielder handy on the bench for 4-3-3,
   // but it appears on the field in 4-4-2 / 4-2-3-1 presets:
   MID_RM_IOS_THEME,
+  FWD_RW_THERMO,
 
   // keep a few general skill/infra placeholders if you like:
 
-  { id: "bench-temp-1",        label: "Sub — Temporary Player", details: "Placeholder for future entry.",                      badge: "SUB", color: "bg-zinc-700", icon: "⌛" },
-  { id: "bench-temp-2",        label: "Sub — Temporary Player", details: "Placeholder for future entry.",                      badge: "SUB", color: "bg-zinc-700", icon: "⌛" },
+  { id: "bench-temp-1", label: "Sub — Temporary Player", details: "Placeholder for future entry.", badge: "SUB", color: "bg-zinc-700", icon: "⌛" },
+  { id: "bench-temp-2", label: "Sub — Temporary Player", details: "Placeholder for future entry.", badge: "SUB", color: "bg-zinc-700", icon: "⌛" },
 ];
 
 /* =========================
@@ -229,14 +237,14 @@ export const bench = [
 // 4-4-2 (LM/LCM/RCM/RM + 2 ST/SS)
 export const formation442 = [
   // Forwards
-  { ...FWD_ST_CHARTBEAT, x: 46, y: 22, badge: "ST" },
-  { ...FWD_LW_ERICSSON, id: "ss-ericsson", label: "ST — Ericsson", x: 54, y: 22, badge: "ST" },
+  { ...FWD_ST_CHARTBEAT, x: 38, y: 22, badge: "ST" },
+  { ...FWD_LW_ERICSSON, label: "ST — Ericsson", x: 62, y: 22, badge: "ST" },
 
   // Midfield 4 (all projects get on the field here)
-  { ...MID_LCM_DIALIN, x: 30, y: 46, badge: "LM" },
-  { ...MID_CDM_SOCCER_SITE, id: "lcm-soccer-site-442", x: 44, y: 48, badge: "LCM" },
-  { ...MID_RCM_UTDNSBE, id: "rcm-utdnsbe-442", x: 56, y: 48, badge: "RCM" },
-  { ...MID_RM_IOS_THEME, x: 70, y: 46, badge: "RM" },
+  { ...MID_LCM_DIALIN, x: 20, y: 46, badge: "LM" },
+  { ...MID_CDM_SOCCER_SITE, x: 38, y: 48, badge: "LCM" },
+  { ...MID_RCM_UTDNSBE, x: 62, y: 48, badge: "RCM" },
+  { ...MID_RM_IOS_THEME, x: 80, y: 46, badge: "RM" },
 
   // Back 4 (orgs/awards)
   DEF_LB_NSBE,
@@ -255,7 +263,7 @@ export const formation4231 = [
 
   // AM line — keep work experiences wide if you like
   { ...FWD_LW_ERICSSON, x: 28, y: 30, badge: "LW" },
-  { ...MID_CDM_SOCCER_SITE, id: "cam-soccer-site", label: "CAM — Soccer Personal Site", x: 50, y: 32, badge: "CAM" },
+  { ...MID_CDM_SOCCER_SITE, label: "CAM — Soccer Personal Site", x: 50, y: 32, badge: "CAM" },
   { ...FWD_RW_THERMO, x: 72, y: 30, badge: "RW" },
 
   // Double pivot — project mids
