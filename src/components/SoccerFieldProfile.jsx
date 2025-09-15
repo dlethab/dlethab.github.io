@@ -16,6 +16,7 @@ import {
 } from "../team/teamData";
 import PlayerDot from "./PlayerDot";
 import siteLogo from "../assets/logos/dialinlogo.png";
+import resume from "../assets/logos/resumepic.png";
 
 /**
  * Desktop layout: Football Manager style
@@ -25,7 +26,7 @@ import siteLogo from "../assets/logos/dialinlogo.png";
 export default function SoccerFieldProfile({ title = "My Lineup" }) {
   const [currentFormation, setCurrentFormation] = useState("4-3-3");
   const [positions, setPositions] = useState(formation433.map((p) => ({ ...p })));
-  const [selectedId, setSelectedId] = useState();
+  const [selectedId, setSelectedId] = useState(manager.id);
   const [hoveredId, setHoveredId] = useState(null);
   /* eslint-disable no-unused-vars */
   const [activeId, setActiveId] = useState(null);
@@ -50,9 +51,10 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
     return (
       positions.find((p) => p.id === selectedId) ||
       bench.find((b) => b.id === selectedId) ||
-      (manager.id === selectedId ? manager : null)
+      (manager.id === selectedId ? manager : null)  // Return manager if selected
     );
   }, [positions, selectedId]);
+
 
   /* was used in old broken dragging system
   const activeItem = useMemo(
@@ -160,81 +162,78 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
         {/* LEFT COLUMN wrapper (replace your single field <section> with this) */}
         <div className="flex flex-col gap-4">
 
-<section className="rounded-3xl border border-white/10 bg-zinc-800/40 backdrop-blur px-4 py-3 md:py-1">
-  {/* Mobile: logo | controls. Desktop: slim single row */}
-  <div className="grid grid-cols-[90px_1fr] items-stretch gap-3 md:flex md:items-center md:justify-between">
-    {/* LEFT: circular logo (mobile-only) */}
-    <div className="md:hidden self-stretch flex items-center justify-center">
-      <div className="h-full max-h-16 aspect-square rounded-full bg-blue-600 ring-2 ring-white/20 p-2 grid place-items-center shrink-0">
-        <img
-          src={siteLogo}
-          alt="Site logo"
-          className="h-full w-full object-contain rounded-full no-native-dnd"
-          draggable={false}
-          onDragStart={(e) => e.preventDefault()}
-        />
-      </div>
-    </div>
+        <section className="rounded-3xl border border-white/10 bg-zinc-800/40 backdrop-blur px-4 py-3 md:py-1">
+          {/* Mobile: logo | controls. Desktop: slim single row */}
+          <div className="grid grid-cols-[90px_1fr] items-stretch gap-3 md:flex md:items-center md:justify-between">
+            {/* LEFT: circular logo (mobile-only) */}
+            <div className="md:hidden self-stretch flex items-center justify-center">
+              <div className="h-full max-h-16 aspect-square rounded-full bg-blue-600 ring-2 ring-white/20 p-2 grid place-items-center shrink-0">
+                <img
+                  src={siteLogo}
+                  alt="Site logo"
+                  className="h-full w-full object-contain rounded-full no-native-dnd"
+                  draggable={false}
+                  onDragStart={(e) => e.preventDefault()}
+                />
+              </div>
+            </div>
 
-    {/* RIGHT: buttons */}
-    {/* Mobile: horizontal buttons + full-width Reset below */}
-    <div className="md:hidden flex flex-col gap-2">
-      <div className="flex gap-2 flex-wrap">
-        {FORMATIONS.map((f) => {
-          const active = currentFormation === f;
-          return (
-            <button
-              key={f}
-              onClick={() => loadFormation(f)}
-              className={`px-3 py-1.5 rounded-lg text-sm transition ${
-                active ? "bg-white/10 ring-1 ring-yellow-400" : "bg-white/5 hover:bg-white/10"
-              }`}
-              aria-pressed={active}
-            >
-              {f}
-            </button>
-          );
-        })}
-      </div>
-      <button
-        onClick={() => loadFormation(currentFormation)}
-        className="w-full px-3 py-1.5 rounded-md text-sm bg-zinc-700 hover:bg-zinc-600"
-        title="Reset players to the current formation's default positions"
-      >
-        Reset
-      </button>
-    </div>
+            {/* RIGHT: buttons */}
+            {/* Mobile: horizontal buttons + full-width Reset below */}
+            <div className="md:hidden flex flex-col gap-2">
+              <div className="flex gap-2 flex-wrap w-full justify-between">
+                {FORMATIONS.map((f) => {
+                  const active = currentFormation === f;
+                  return (
+                    <button
+                      key={f}
+                      onClick={() => loadFormation(f)}
+                      className={`px-3 py-1.5 rounded-lg text-sm transition ${
+                        active ? "bg-white/10 ring-1 ring-yellow-400" : "bg-white/5 hover:bg-white/10"
+                      }`}
+                      aria-pressed={active}
+                    >
+                      {f}
+                    </button>
+                  );
+                })}
+                <button
+                  onClick={() => {loadFormation(currentFormation); setSelectedId(manager.id);}}
+                  className="w-full h-9 rounded-lg text-sm bg-zinc-700 hover:bg-zinc-600"
+                  title="Reset players to the current formation's default positions"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
 
-    {/* Desktop: one slim row with 4 equal columns (3 formations + Reset) */}
-    <div className="hidden md:grid md:grid-cols-4 md:gap-2 md:w-full">
-      {FORMATIONS.map((f) => {
-        const active = currentFormation === f;
-        return (
-          <button
-            key={f}
-            onClick={() => loadFormation(f)}
-            className={`w-full h-9 rounded-lg text-sm transition ${
-              active ? "bg-white/10 ring-1 ring-yellow-400" : "bg-white/5 hover:bg-white/10"
-            }`}
-            aria-pressed={active}
-          >
-            {f}
-          </button>
-        );
-      })}
-      <button
-        onClick={() => loadFormation(currentFormation)}
-        className="w-full h-9 rounded-lg text-sm bg-zinc-700 hover:bg-zinc-600"
-        title="Reset players to the current formation's default positions"
-      >
-        Reset
-      </button>
-    </div>
-  </div>
-</section>
-
-
-
+            {/* Desktop Vertical: one slim row with 4 equal columns (3 formations + Reset) */}
+            <div className="hidden md:grid md:grid-cols-4 md:gap-2 md:w-full">
+              {FORMATIONS.map((f) => {
+                const active = currentFormation === f;
+                return (
+                  <button
+                    key={f}
+                    onClick={() => loadFormation(f)}
+                    className={`w-full h-9 rounded-lg text-sm transition ${
+                      active ? "bg-white/10 ring-1 ring-yellow-400" : "bg-white/5 hover:bg-white/10"
+                    }`}
+                    aria-pressed={active}
+                  >
+                    {f}
+                  </button>
+                );
+              })}
+              <button
+                onClick={() => {loadFormation(currentFormation); setSelectedId(manager.id);}}
+                className="w-full h-9 rounded-lg text-sm bg-zinc-700 hover:bg-zinc-600"
+                title="Reset players to the current formation's default positions"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </section>
         {/* Field (your original section) */}
         <section className="rounded-3xl overflow-hidden shadow-xl ring-1 ring-white/10 bg-zinc-800/40 backdrop-blur">
             <div
@@ -322,18 +321,18 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
             </div>
         </section>
         </div>
-
 {/* Selected Player — single card with 2/3 : 1/3 split */}
 <section className="rounded-3xl border border-white/10 bg-zinc-800/40 backdrop-blur p-0 overflow-hidden grid min-h-[34rem] grid-rows-[1fr_2fr]">
+  
   {/* Logo (bottom 1/3) */}
-  <div className="p-4 border-t border-white/10">
+  <div className="p-4 border-t border-white/10 pb-0"> {/* pb-0 removes bottom padding */}
     {selected ? (
       selected.logo ? (
-        <div className="h-full w-full flex items-center justify-center">
+        <div className="h-full w-full bg-gray p-1 rounded-lg flex items-center justify-center">
           <img
             src={selected.logo}
             alt={`${selected.label} logo`}
-            className="max-h-[80%] max-w-[80%] object-contain rounded-2xl ring-1 ring-white/20 bg-white/5 p-3 no-native-dnd"
+            className="w-64 h-60 object-contain rounded-2xl ring-1 ring-white/20 bg-white/5 p-3 no-native-dnd"
             draggable={false}
             onDragStart={(e) => e.preventDefault()}
             onError={(e) => { e.currentTarget.src = "/logos/fallback.png"; }}
@@ -360,43 +359,73 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
       </div>
     )}
   </div>
+
   {/* Info (top 2/3) */}
-  <div className="p-4 min-h-0 overflow-auto flex flex-col gap-3">
+  <div className="p-4 min-h-0 overflow-auto flex flex-col gap-3 pt-0"> {/* pt-0 removes top padding for manager */}
     <h2 className="text-sm font-semibold tracking-wide uppercase text-zinc-300">
-      Selected Player
+      {selected && selected.id === "manager" ? "Manager" : "Selected Player"}
     </h2>
 
+
     {selected ? (
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <span className={`h-2.5 w-2.5 rounded-full ${selected.color ?? "bg-indigo-500"}`} />
-          <span className="text-lg font-medium">{selected.label}</span>
-        </div>
-
-        <div className="text-sm text-zinc-200 whitespace-pre-wrap">
-          {selected.details}
-        </div>
-
-        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
-          <div>
-            <dt className="text-zinc-400">Dates</dt>
-            <dd className="text-zinc-100">{selected.dates || "Add dates in teamData.js"}</dd>
+      selected.id === "manager" ? (
+        // Custom layout for manager intro
+        <div className="space-y-3">
+          <h3 className="text-xl font-semibold text-white">{selected.label}</h3>
+          <p className="text-sm text-zinc-200">{selected.details}</p>
+          <div className="text-sm text-zinc-300">
+            <p>{selected.description}</p>
+            <p className="mt-2">School: <span className="text-[#006747]">{selected.school}</span></p>
+            <p className="mt-1">Graduation Date: <span className="text-[#FF5F00]">{selected.gradDate}</span></p>
           </div>
-          <div>
-            <dt className="text-zinc-400">Tools</dt>
-            <dd className="text-zinc-100">{selected.tools || "Add tools in teamData.js"}</dd>
-          </div>
-        </dl>
 
-        {"href" in selected && selected.href && (
-          <a
-            href={selected.href}
-            className="inline-flex items-center gap-2 text-indigo-300 hover:text-indigo-200 underline"
-          >
-            Learn more ↗
-          </a>
-        )}
-      </div>
+          {/* Resume Image */}
+          <div className="mt-6">
+            <p className="text-zinc-200">Click below to view my resume:</p>
+            <a href={selected.resumeFile} target="_blank" rel="noopener noreferrer">
+              <div className="mt-2 flex justify-center">
+                <img
+                  src={resume}
+                  alt="Resume"
+                  className="w-40 h-55 cursor-pointer rounded-lg shadow-lg bg-white p-2"
+                />
+              </div>
+            </a>
+          </div>
+        </div>
+      ) : (
+        // Default layout for other players
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <span className={`h-2.5 w-2.5 rounded-full ${selected.color ?? "bg-indigo-500"}`} />
+            <span className="text-lg font-medium">{selected.label}</span>
+          </div>
+
+          <div className="text-sm text-zinc-200 whitespace-pre-wrap">
+            {selected.details}
+          </div>
+
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+            <div>
+              <dt className="text-zinc-400">Dates</dt>
+              <dd className="text-zinc-100">{selected.dates || "Add dates in teamData.js"}</dd>
+            </div>
+            <div>
+              <dt className="text-zinc-400">Tools</dt>
+              <dd className="text-zinc-100">{selected.tools || "Add tools in teamData.js"}</dd>
+            </div>
+          </dl>
+
+          {"href" in selected && selected.href && (
+            <a
+              href={selected.href}
+              className="inline-flex items-center gap-2 text-indigo-300 hover:text-indigo-200 underline"
+            >
+              Learn more ↗
+            </a>
+          )}
+        </div>
+      )
     ) : (
       <div className="text-sm text-zinc-400">
         Select a dot on the field to see full details, dates, and tools.
@@ -404,8 +433,8 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
     )}
   </div>
 
-  
 </section>
+
 
 
 

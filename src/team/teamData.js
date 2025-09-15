@@ -5,20 +5,28 @@
 import ericssonLogo from "../assets/logos/ericsson.png";
 import chartbeatLogo from "../assets/logos/chartbeat.png";
 import thermoLogo from "../assets/logos/thermofisher.png";
+import dlet from "../assets/logos/dlet.png";
+
+import resume from "../files/Dlet Habtemariam - Resume.pdf";
 
 export const manager = {
   id: "manager",
   label: "Dlet Habtemariam",
   details:
-    "Dlet Hab desc",
-  x: 92,
-  y: 6,
-  badge: "MGR",
+    "Hello! Welcome to my interactive portfolio! Click on the player dots to explore different sections, and use the depth chart to see detailed information about my projects, skills, and resume.",
+  description: " A little about me: I love building cool projects, coding, drawing and playing soccer!",
+  school: "University of Texas at Dallas",
+  gradDate: "December 2025",
+  resumeImage: resume,
+  resumeFile: resume,
   color: "bg-slate-800",
   icon: "🧑‍💼",
-  // dates: "", // optional
-  // tools: "", // optional
+  logo: dlet,
+  x: 85,
+  y: 10,
+  badge: "MANAGER",
 };
+
 
 /* =========================
    XI — formation 4-3-3
@@ -28,23 +36,23 @@ export const manager = {
 const FWD_LW_ERICSSON = {
   id: "lw-ericsson",
   label: "LW — Ericsson (SWE Intern)",
-  details:
-    "CI/CD (GitLab, Docker, K8s), QA frameworks (Helm/Allure), services with Kafka + Postgres.",
+  details: "• Built and maintained CI/CD pipelines using GitLab, Docker, and Kubernetes to automate deployment workflows and reduce integration errors; Engineered a reusable QA testing framework with Allure dashboards and Helm-based test environments, accelerating delivery cycles by 10%\n\n• Developed microservices that leveraged Kafka for event-driven messaging and PostgreSQL for persistent storage; wrote internal documentation and reintegration guides adopted across teams; contributed to Agile sprints, code reviews, and testing coverage improvements",
+  dates: "May 2023 - Dec 2023",
+  tools: "GitLab, Docker, Kubernetes, Helm, Allure, YAML",
   x: 28,
   y: 26,
   badge: "LW",
   color: "bg-rose-500",
   icon: "🏢",
   logo: ericssonLogo,
-  // dates: "",
-  // tools: "GitLab CI, Docker, K8s, Helm, Kafka, Postgres, Allure",
 };
+
 
 const FWD_ST_CHARTBEAT = {
   id: "st-chartbeat",
   label: "ST — Chartbeat (SWE Intern)",
   details:
-    "Scaled scraping/content pipelines (Kafka + Python), reduced failures, added alerting & dashboards.",
+  "• Improved platform observability by implementing 10+ real-time alerts via Nagios and building centralized Grafana dashboards used across engineering; reduced issue detection time by 80% and supported Agile sprint planning, code reviews, and cross-functional collaboration\n\n• Designed solution to reduce data scraping failures by 70% by engineering a scalable backend solution in Python to bypass login-gated content; developed and deployed RESTful APIs and integrated Kafka-based streaming to support AI-driven content processing in real-time",
   x: 50,
   y: 20,
   badge: "ST",

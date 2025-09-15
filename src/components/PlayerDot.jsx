@@ -9,7 +9,7 @@ export default function PlayerDot({
   badge,
   icon = "•",
   color = "bg-indigo-500",
-  logo,                    // <-- NEW
+  logo,
   onClick,
   emphasized = false,
 }) {
