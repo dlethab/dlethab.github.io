@@ -7,7 +7,7 @@ import chartbeatLogo from "../assets/logos/chartbeat.png";
 import thermoLogo from "../assets/logos/thermofisher.png";
 import dlet from "../assets/logos/dlet.png";
 
-import resume from "../files/Dlet Habtemariam - Resume.pdf";
+import resume from "../Dlet Habtemariam - Resume.pdf"
 
 export const manager = {
   id: "manager",
@@ -52,30 +52,30 @@ const FWD_ST_CHARTBEAT = {
   id: "st-chartbeat",
   label: "ST — Chartbeat (SWE Intern)",
   details:
-  "• Improved platform observability by implementing 10+ real-time alerts via Nagios and building centralized Grafana dashboards used across engineering; reduced issue detection time by 80% and supported Agile sprint planning, code reviews, and cross-functional collaboration\n\n• Designed solution to reduce data scraping failures by 70% by engineering a scalable backend solution in Python to bypass login-gated content; developed and deployed RESTful APIs and integrated Kafka-based streaming to support AI-driven content processing in real-time",
+  "• Built internal monitoring and observability system for Generative AI tool, providing insights into system performance, and reducing issue detection time by 80% using Kafka, time-series data, Nagios alerts, and a Grafana dashboard\n\n• Designed data scraping solution to detect and bypass login-gated pages using Python and PostgreSQL to reduce data scraping failures by 70%",
   x: 50,
   y: 20,
   badge: "ST",
   color: "bg-indigo-500",
   icon: "⚽",
   logo: chartbeatLogo,
-  // dates: "",
-  // tools: "Python, Kafka, Grafana, Prometheus",
+  dates: "Summer 2024",
+  tools: "Python, Kafka, Grafana, Nagios, PostgreSQL",
 };
 
 const FWD_RW_THERMO = {
   id: "rw-thermofisher",
   label: "RW — Thermo Fisher Scientific (SWE Intern)",
   details:
-    "Process mining dashboards (Celonis) to uncover bottlenecks; Python + SQL automation for reporting.",
+    "• Led automation efforts for critical financial processes by designing Celonis Process Mining graphs to track and visualize bottlenecks and inefficiencies\n\n• Developed Python and SQL solutions to reduce data workflow errors, delivering 15% improvements on data quality",
   x: 72,
   y: 26,
   badge: "RW",
   color: "bg-emerald-500",
   icon: "🧪",
   logo: thermoLogo,
-  // dates: "",
-  // tools: "Celonis, Python, SQL",
+  dates: "Summer 2022",
+  tools: "Celonis, Python, SQL",
 };
 
 // Midfielders = projects (pick 3 for 4-3-3; the 4th shows in other formations)
@@ -83,14 +83,14 @@ const MID_LCM_DIALIN = {
   id: "lcm-dialin",
   label: "LCM — Dial In (Project)",
   details:
-    "Word/pattern game with custom logic, daily mode, share cards; lightweight backend + front-end UX.",
+    "• Creator and developer; Cryptic number-decoding game with hundreds of plays and 80% user retention rate\n\n• Researched and developed precise length control solution for LLM to generate multi word phrases of length 10",
   x: 35,
   y: 48,
   badge: "LCM",
   color: "bg-amber-500",
   icon: "🎮",
-  // dates: "",
-  // tools: "React, Node/Express (optional), Vercel/Netlify",
+  dates: "April 2024",
+  tools: "React, Node, OpenAI API, Python",
 };
 
 const MID_CDM_SOCCER_SITE = {
@@ -103,8 +103,8 @@ const MID_CDM_SOCCER_SITE = {
   badge: "CDM",
   color: "bg-fuchsia-500",
   icon: "⚙️",
-  // dates: "",
-  // tools: "React, TailwindCSS, @dnd-kit, Vite/CRA",
+  dates: "September 2025",
+  tools: "React, TailwindCSS, @dnd-kit, Git",
 };
 
 const MID_RCM_UTDNSBE = {
@@ -117,8 +117,8 @@ const MID_RCM_UTDNSBE = {
   badge: "RCM",
   color: "bg-cyan-500",
   icon: "🌐",
-  // dates: "",
-  // tools: "Node, JS/TS, Bootstrap/Tailwind",
+  dates: "2023",
+  tools: "Node, JS/TS, Bootstrap/Tailwind",
 };
 
 // 4th midfielder (projects pool)
@@ -126,60 +126,64 @@ const MID_RM_IOS_THEME = {
   id: "rm-ios-theme",
   label: "RM — iOS Messages Music Theme (Project)",
   details:
-    "iOS/UX concept for music-themed Messages; theming, animation, design system exploration.",
+    "• Designed and developed iMessage extension that sets UI theme to artist’s Live Art from Spotify & Apple Music\n\n• Runs theme change protocol when shared music is played in Messages app",
   x: 78, // used in 4-4-2 / 4-2-3-1 (not in 4-3-3 XI)
   y: 44,
   badge: "RM",
   color: "bg-sky-500",
   icon: "🎵",
-  // dates: "",
-  // tools: "SwiftUI (concept), Figma",
+  dates: "September 2025",
+  tools: "SwiftUI, MusicKit, Spotify Web API, Figma",
 };
 
 // Defenders/GK = orgs & awards
-const DEF_LB_NSBE = {
-  id: "lb-nsbe-leadership",
-  label: "LB — NSBE Leadership",
+const DEF_LB_NSBE_FINANCE = {
+  id: "lb-nsbe-finance",
+  label: "LB — UTD NSBE Finance Chair",
   details:
-    "Sponsorships, mentorship nights, workshops; member engagement & study nights programming.",
+    "• Raised over $6,000 in chapter funds through corporate outreach, local fundraising, and scholarships\n\n• Led a STEM focused Lego Robotics camp for low-income middle school students in Dallas; taught functional programming skills and basic robotic hardware using Lego Spike Prime kits",
   x: 20,
   y: 65,
   badge: "LB",
   color: "bg-teal-500",
-  icon: "🤝",
+  icon: "$",
+  dates: "2024 - 2025",
 };
 
 const DEF_LCB_HACKNY = {
   id: "lcb-hackny",
   label: "LCB — HackNY Fellow",
-  details: "HackNY Fellow: founder/CTO talks, NYC tech network.",
+  details: "• Selected as 1 of 20 fellows for a prestigious NYC based tech fellowship with less than a 3% acceptance rate\n\n• Engaged with tech founders, CEOs, CTOs, civic leaders, and engineers from the NYC startup ecosystem",
   x: 38,
   y: 70,
   badge: "LCB",
   color: "bg-violet-600",
   icon: "🎖️",
+  dates: "Summer 2024",
 };
 
-const DEF_RCB_TEMP = {
-  id: "rcb-temp-org",
-  label: "RCB — Temporary (Org/Award)",
-  details: "Placeholder for additional org/award.",
+const DEF_RCB_NSBE_SENATOR = {
+  id: "rcb-nsbe-senator",
+  label: "RCB — UTD NSBE Senator",
+  details: "Represented UTD NSBE chapter at regional and national conferences; voted on key organizational policies and initiatives.\n\nActed as a liaison between with Student Government Association to advocate for STEM students on campus.",
   x: 62,
   y: 70,
   badge: "RCB",
-  color: "bg-zinc-600",
-  icon: "🏅",
+  color: "bg-orange-600",
+  icon: "🤝",
+  dates: "2023 - 2024",
 };
 
 const DEF_RB_TEMP = {
-  id: "rb-temp-org",
-  label: "RB — Temporary (Org/Award)",
-  details: "Placeholder for additional org/award.",
+  id: "rb-nsbe-mentor",
+  label: "RB — UTD NSBE Mentor",
+  details: "Currently mentoring underclassmen. Guiding them through course selection, tutoring, project help, internships, and career advice.",
   x: 80,
   y: 65,
   badge: "RB",
-  color: "bg-zinc-600",
-  icon: "🏅",
+  color: "bg-blue-600",
+  icon: "👨🏾‍🏫",
+  dates: "2025 - Present",
 };
 
 const GK_TEMP = {
@@ -205,9 +209,9 @@ export const formation433 = [
   MID_RCM_UTDNSBE,
 
   // Defense/GK (orgs/awards)
-  DEF_LB_NSBE,
+  DEF_LB_NSBE_FINANCE,
   DEF_LCB_HACKNY,
-  DEF_RCB_TEMP,
+  DEF_RCB_NSBE_SENATOR,
   DEF_RB_TEMP,
   GK_TEMP,
 ];
@@ -221,11 +225,12 @@ export const bench = [
     id: "sub-davaco",
     label: "Sub — Davaco (SWE Intern)",
     details:
-      "SQL Server data warehouse across thousands of employees; ETL automation; SSRS → Power BI.",
+      "• Built SQL Server data warehouse to aggregate business transactions across 4,000+ employees; built automated ETL workflow to integrate Oracle data\n\n• Led SQL reporting infrastructure transformation from SSRS to Power BI, cutting time for analysts to make key insights",
     badge: "SUB",
     color: "bg-zinc-700",
     icon: "🧱",
-    // tools: "SQL Server, SSIS/ETL, Power BI",
+    tools: "SQL, ETL, Power BI",
+    dates: "February 2021 - May 2022",
   },
   // keep the 4th midfielder handy on the bench for 4-3-3,
   // but it appears on the field in 4-4-2 / 4-2-3-1 presets:
@@ -234,8 +239,8 @@ export const bench = [
 
   // keep a few general skill/infra placeholders if you like:
 
-  { id: "bench-temp-1", label: "Sub — Temporary Player", details: "Placeholder for future entry.", badge: "SUB", color: "bg-zinc-700", icon: "⌛" },
-  { id: "bench-temp-2", label: "Sub — Temporary Player", details: "Placeholder for future entry.", badge: "SUB", color: "bg-zinc-700", icon: "⌛" },
+  //{ id: "bench-temp-1", label: "Sub — Temporary Player", details: "Placeholder for future entry.", badge: "SUB", color: "bg-zinc-700", icon: "⌛" },
+  //{ id: "bench-temp-2", label: "Sub — Temporary Player", details: "Placeholder for future entry.", badge: "SUB", color: "bg-zinc-700", icon: "⌛" },
 ];
 
 /* =========================
@@ -255,9 +260,9 @@ export const formation442 = [
   { ...MID_RM_IOS_THEME, x: 80, y: 46, badge: "RM" },
 
   // Back 4 (orgs/awards)
-  DEF_LB_NSBE,
+  DEF_LB_NSBE_FINANCE,
   DEF_LCB_HACKNY,
-  DEF_RCB_TEMP,
+  DEF_RCB_NSBE_SENATOR,
   DEF_RB_TEMP,
 
   // GK
@@ -279,9 +284,9 @@ export const formation4231 = [
   { ...MID_RCM_UTDNSBE, x: 60, y: 48, badge: "RCDM" },
 
   // Back 4 (orgs/awards)
-  DEF_LB_NSBE,
+  DEF_LB_NSBE_FINANCE,
   DEF_LCB_HACKNY,
-  DEF_RCB_TEMP,
+  DEF_RCB_NSBE_SENATOR,
   DEF_RB_TEMP,
 
   // GK

@@ -1,7 +1,6 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useState, useRef, useEffect } from "react";
 import {
   DndContext,
-  //DragOverlay,
   useSensor,
   useSensors,
   PointerSensor,
@@ -25,6 +24,28 @@ import resume from "../assets/logos/resumepic.png";
  */
 export default function SoccerFieldProfile({ title = "My Lineup" }) {
   const [currentFormation, setCurrentFormation] = useState("4-3-3");
+  const [positions, setPositions] = useState(formation433.map((p) => ({ ...p })));
+  const [selectedId, setSelectedId] = useState(manager.id);
+  const [hoveredId, setHoveredId] = useState(null);
+
+  const FORMATIONS = ["4-3-3", "4-2-3-1", "4-4-2"];
+  const isDesktop = useIsDesktop();
+
+  const isEmphasized = (id) => id === selectedId || id === hoveredId;
+
+  function loadFormation(name) {
+    let preset = formation433;
+    if (name === "4-4-2") preset = formation442;
+    if (name === "4-2-3-1") preset = formation4231;
+    setCurrentFormation(name);
+    setPositions(preset.map((p) => ({ ...p })));
+    setSelectedId(manager.id);
+  }
+  
+  
+
+  const DesktopLayout = () => {
+    const [currentFormation, setCurrentFormation] = useState("4-3-3");
   const [positions, setPositions] = useState(formation433.map((p) => ({ ...p })));
   const [selectedId, setSelectedId] = useState(manager.id);
   const [hoveredId, setHoveredId] = useState(null);
@@ -104,35 +125,30 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
 
   // Depth chart groups (uses new IDs)
   const depth = useMemo(() => {
-    const all = new Map();
-    [...formation433, ...bench].forEach((p) => all.set(p.id, p));
+     const all = new Map();
+      [...formation433, ...bench].forEach((p) => all.set(p.id, p));
 
-    const EXPERIENCE_IDS = new Set([
-      "lw-ericsson",
-      "st-chartbeat",
-      "rw-thermofisher",
-      "sub-davaco",
-    ]);
+      const EXPERIENCE_IDS = new Set([
+        "lw-ericsson",
+        "st-chartbeat",
+        "rw-thermofisher",
+        "sub-davaco",
+      ]);
 
-    const PROJECT_IDS = new Set([
-      "lcm-dialin",
-      "rcm-utdnsbe",
-      "cdm-soccer-site",
-      "rm-ios-theme",
-    ]);
+      const PROJECT_IDS = new Set([
+        "lcm-dialin",
+        "rcm-utdnsbe",
+        "cdm-soccer-site",
+        "rm-ios-theme",
+      ]);
 
-    const ORG_IDS = new Set([
-      "lb-nsbe-leadership",
-      "lcb-hackny",
-      "rcb-temp-org",
-      "rb-temp-org",
-      "gk-temp-award",
-      "bench-observability",
-      "bench-web",
-      "bench-cloud",
-      "bench-temp-1",
-      "bench-temp-2",
-    ]);
+      const ORG_IDS = new Set([
+        "lb-nsbe-finance",
+        "lcb-hackny",
+        "rcb-nsbe-senator",
+        "rb-nsbe-mentor",
+        "gk-temp-award",
+      ]);
 
     const forwards = [];
     const mids = [];
@@ -481,6 +497,176 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
   );
 }
 
+  const MobileLayout = () => {
+      // Shared props for the reusable SoccerField
+      const fieldProps = {
+        positions,
+        setPositions,
+        selectedId,
+        setSelectedId,
+        hoveredId,
+        setHoveredId,
+        manager,
+        isEmphasized,
+      };
+
+    const [showDepthChart, setShowDepthChart] = useState(false);
+    const [showInfoPage, setShowInfoPage] = useState(false);
+
+    const mDepth = useMemo(() => {
+      const all = new Map();
+      [...formation433, ...bench].forEach((p) => all.set(p.id, p));
+
+      const EXPERIENCE_IDS = new Set([
+        "lw-ericsson",
+        "st-chartbeat",
+        "rw-thermofisher",
+        "sub-davaco",
+      ]);
+
+      const PROJECT_IDS = new Set([
+        "lcm-dialin",
+        "rcm-utdnsbe",
+        "cdm-soccer-site",
+        "rm-ios-theme",
+      ]);
+
+      const ORG_IDS = new Set([
+        "lb-nsbe-finance",
+        "lcb-hackny",
+        "rcb-nsbe-senator",
+        "rb-nsbe-mentor",
+        "gk-temp-award",
+      ]);
+
+      const forwards = [];
+      const mids = [];
+      const defs = [];
+
+      for (const p of all.values()) {
+        if (EXPERIENCE_IDS.has(p.id)) forwards.push(p);
+        else if (PROJECT_IDS.has(p.id)) mids.push(p);
+        else if (ORG_IDS.has(p.id)) defs.push(p);
+      }
+
+      return {
+        forwards,
+        midfielders: mids,
+        defenders: defs,
+        manager: [manager],
+      };
+    }, []);
+
+    return (
+      <div className="relative w-full h-screen bg-zinc-900 text-zinc-100">
+        {/* Formation Selector */}
+        <div className="w-[90%] p-4" style={{ zIndex: 1000 }}>
+          <div className="flex gap-2 flex-wrap justify-between">
+            {FORMATIONS.map((f) => {
+              const active = currentFormation === f;
+              return (
+                <button
+                  key={f}
+                  onClick={() => loadFormation(f)}
+                  className={`px-3 py-1.5 rounded-lg text-sm transition ${
+                    active ? "bg-white/10 ring-1 ring-yellow-400" : "bg-white/5 hover:bg-white/10"
+                  }`}
+                  aria-pressed={active}
+                >
+                  {f}
+                </button>
+              );
+            })}
+            <button
+              onClick={() => { loadFormation(currentFormation); }}
+              className="w-full h-9 rounded-lg text-sm bg-zinc-700 hover:bg-zinc-600"
+              title="Reset players to the current formation's default positions"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+
+        {/* Field (reusable) */}
+        <div className="w-[90%] p-2 rounded-[20px] relative">
+          <SoccerField {...fieldProps} />
+        </div>
+
+        {/* Info Drawer */}
+        <div
+          className={`fixed top-0 right-0 h-[90%] bg-zinc-800/95 text-white p-4 flex justify-center items-center transition-all duration-300 ease-in-out border-l-2 border-zinc-800 ${
+            showInfoPage ? "w-[80%]" : "w-[10%]"
+          }`}
+          style={{ zIndex: 999 }}
+          onClick={() => setShowInfoPage((s) => !s)}
+        >
+          <h2 className="text-sm transform rotate-90 origin-left absolute left-4 top-1/2 -translate-y-1/2 whitespace-nowrap">
+            Selected Player
+          </h2>
+        </div>
+
+        {/* Depth Chart Section */}
+        <div
+          className={`absolute bottom-0 left-0 w-full bg-zinc-800/95 p-4 transition-all duration-300 ease-in-out overflow-y-auto border-t-2 border-zinc-800 ${
+            showDepthChart ? "h-[75vh] translate-y-0" : "h-[10vh] translate-y-0"
+          }`}
+          onClick={() => setShowDepthChart((s) => !s)}
+          style={{ zIndex: 999 }}
+        >
+          <h2 className="text-white text-xl font-semibold uppercase cursor-pointer">
+            Depth Chart
+          </h2>
+
+          {showDepthChart && (
+            <div className="mt-2">
+              <DepthGroup
+                title="Manager - Dlet Habtemariam"
+                items={mDepth.manager}
+                onSelect={setSelectedId}
+                onHover={setHoveredId}
+                selectedId={selectedId}
+                hoveredId={hoveredId}
+              />
+              <DepthGroup
+                title="Forwards — Work Experience"
+                items={mDepth.forwards}
+                onSelect={setSelectedId}
+                onHover={setHoveredId}
+                selectedId={selectedId}
+                hoveredId={hoveredId}
+              />
+              <DepthGroup
+                title="Midfielders — Projects"
+                items={mDepth.midfielders}
+                onSelect={setSelectedId}
+                onHover={setHoveredId}
+                selectedId={selectedId}
+                hoveredId={hoveredId}
+              />
+              <DepthGroup
+                title="Defenders/GK — Orgs & Awards"
+                items={mDepth.defenders}
+                onSelect={setSelectedId}
+                onHover={setHoveredId}
+                selectedId={selectedId}
+                hoveredId={hoveredId}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="relative h-screen w-full bg-zinc-900 text-zinc-100">
+      <div className="relative w-full h-screen bg-zinc-900">
+        {isDesktop ? <DesktopLayout /> : <MobileLayout />}
+      </div>
+    </div>
+  );
+}
+
 function DepthGroup({ title, items, onSelect, onHover, selectedId, hoveredId }) {
   return (
     <div>
@@ -492,8 +678,9 @@ function DepthGroup({ title, items, onSelect, onHover, selectedId, hoveredId }) 
             return (
               <li key={p.id}>
                 <button
-                  className={`w-full text-left px-2 py-1 rounded-lg flex items-center gap-2 transition
-                    ${active ? "bg-white/10 ring-1 ring-yellow-400" : "hover:bg-white/5"}`}
+                  className={`w-full text-left px-2 py-1 rounded-lg flex items-center gap-2 transition ${
+                    active ? "bg-white/10 ring-1 ring-yellow-400" : "hover:bg-white/5"
+                  }`}
                   onClick={() => onSelect(p.id)}
                   onMouseEnter={() => onHover?.(p.id)}
                   onMouseLeave={() => onHover?.(null)}
@@ -523,12 +710,11 @@ function DepthGroup({ title, items, onSelect, onHover, selectedId, hoveredId }) 
   );
 }
 
-
 function FieldMarkings() {
   return (
     <svg
       viewBox="0 0 100 150"
-      className="absolute 0 rounded-[20px] ring-2 ring-white/90"
+      className="absolute rounded-[20px] ring-2 ring-white/90"
       preserveAspectRatio="none"
     >
       <rect x="0" y="0" width="100" height="150" rx="8" ry="8" fill="none" stroke="white" strokeWidth="1.5" />
@@ -549,3 +735,160 @@ function FieldMarkings() {
     </svg>
   );
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Reusable SoccerField component (desktop now uses this)
+// Owns ref, sensors, drag math; parent owns data/state.
+// ─────────────────────────────────────────────────────────────────────────────
+function SoccerField({
+  positions,
+  setPositions,
+  selectedId,
+  setSelectedId,
+  hoveredId,
+  setHoveredId,
+  manager,
+  isEmphasized, // optional
+  onDragStart,  // optional
+  onDragEnd,    // optional
+}) {
+  const fieldRef = React.useRef(null);
+  const dragStartRef = React.useRef({}); // { [id]: { x, y } }
+
+  // dnd-kit sensors: small threshold to avoid accidental drags
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } })
+  );
+
+  const emphasize = isEmphasized || ((id) => id === selectedId || id === hoveredId);
+
+  function handleDragStartInternal(event) {
+    const id = event.active?.id;
+    if (!id) return;
+    const p = positions.find((pp) => pp.id === id);
+    if (p) dragStartRef.current[id] = { x: p.x, y: p.y };
+    onDragStart?.(event);
+  }
+
+  function handleDragEndInternal(event) {
+    const { active, delta } = event;
+    if (!active?.id) return;
+    const box = fieldRef.current?.getBoundingClientRect();
+    if (!box || box.width <= 0 || box.height <= 0) return; // safety for hidden/zero-size
+
+    const start = dragStartRef.current[active.id] || { x: 50, y: 50 };
+    const dxPct = (delta.x / box.width) * 100;
+    const dyPct = (delta.y / box.height) * 100;
+
+    const clamp = (v) => Math.max(2, Math.min(98, v));
+    const x = clamp(start.x + dxPct);
+    const y = clamp(start.y + dyPct);
+
+    setPositions((prev) => prev.map((p) => (p.id === active.id ? { ...p, x, y } : p)));
+
+    delete dragStartRef.current[active.id];
+    onDragEnd?.(event);
+  }
+
+  return (
+    <section className="rounded-3xl overflow-hidden shadow-xl ring-1 ring-white/10 bg-zinc-800/40 backdrop-blur">
+      <div
+        ref={fieldRef}
+        className="relative select-none touch-none w-full"
+        style={{ willChange: "transform", aspectRatio: "2 / 3" }}
+        onMouseMove={(e) => {
+          const el = e.target.closest?.("[data-id]");
+          setHoveredId?.(el?.dataset?.id || null);
+        }}
+        onMouseLeave={() => setHoveredId?.(null)}
+      >
+        {/* Grass */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-green-700" />
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className={`absolute inset-y-0 w-[8.5%] ${i % 2 === 0 ? "bg-green-600/50" : "bg-transparent"}`}
+              style={{ left: `${i * 8.5}%` }}
+            />
+          ))}
+        </div>
+
+        {/* Lines */}
+        <FieldMarkings />
+
+        {/* Manager chip */}
+        <button
+          className={`absolute -translate-x-1/2 -translate-y-1/2 transition ${
+            emphasize(manager.id) ? "ring-4 ring-yellow-400/80 rounded-full" : ""
+          }`}
+          style={{ left: `${manager.x}%`, top: `${manager.y}%` }}
+          data-id={manager.id}
+          onClick={() => setSelectedId(manager.id)}
+          onMouseEnter={() => setHoveredId?.(manager.id)}
+          onMouseLeave={() => setHoveredId?.(null)}
+          title={manager.label}
+          aria-label={manager.label}
+        >
+          <div className="relative">
+            <div className={`h-7 px-2 ${manager.color} rounded-full ring-2 ring-white shadow-lg text-xs text-white flex items-center gap-1`}>
+              <span>{manager.icon}</span>
+              <span>{manager.badge}</span>
+            </div>
+          </div>
+        </button>
+
+        {/* DnD */}
+        <DndContext
+          sensors={sensors}
+          onDragStart={handleDragStartInternal}
+          onDragEnd={handleDragEndInternal}
+          modifiers={[restrictToParentElement]}
+        >
+          {positions.map((p) => (
+            <PlayerDot
+              key={p.id}
+              id={p.id}
+              xPct={p.x}
+              yPct={p.y}
+              label={p.label}
+              badge={p.badge}
+              icon={p.icon}
+              logo={p.logo}
+              color={p.color}
+              emphasized={emphasize(p.id)}
+              onClick={() => setSelectedId(p.id)}
+            />
+          ))}
+        </DndContext>
+
+        {/* Helper */}
+        <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/40 text-white text-xs px-3 py-1 rounded-full backdrop-blur-md">
+          Drag a dot to reposition
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+
+  function useIsDesktop() {
+    const [isDesktop, setIsDesktop] = useState(() =>
+      typeof window !== "undefined"
+        ? window.matchMedia("(min-width: 768px)").matches
+        : false
+    );
+    useEffect(() => {
+      const mql = window.matchMedia("(min-width: 768px)");
+      const onChange = (e) => setIsDesktop(e.matches);
+      // Safari support
+      if (mql.addEventListener) mql.addEventListener("change", onChange);
+      else mql.addListener(onChange);
+      return () => {
+        if (mql.removeEventListener) mql.removeEventListener("change", onChange);
+        else mql.removeListener(onChange);
+      };
+    }, []);
+    return isDesktop;
+  }
