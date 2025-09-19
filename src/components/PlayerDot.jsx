@@ -52,14 +52,14 @@ export function Dot({ icon = "•", color = "bg-indigo-500", badge, dragging = f
   return (
     <div className="relative will-change-transform">
       <div
-        className={`h-6 w-6 ${color} rounded-full ring-2 ring-white grid place-items-center text-[10px] text-white transition-transform duration-150
+        className={`h-10 w-10 ${color} rounded-full ring-2 ring-white grid place-items-center text-[10px] text-white transition-transform duration-150
           ${dragging ? "scale-110" : emphasized ? "scale-[1.12]" : ""} ${emphasized ? "shadow-[0_0_0_3px_rgba(250,204,21,0.9)]" : "shadow-lg"}`}
       >
         {logo ? (
           <img
             src={logo}
             alt=""
-            className="h-4 w-4 object-contain rounded-[4px] pointer-events-none"
+            className="h-6 w-6 object-contain rounded-[8] pointer-events-none"
             draggable={false}
             onDragStart={(e) => e.preventDefault()}
           />
