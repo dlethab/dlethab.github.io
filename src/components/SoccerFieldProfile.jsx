@@ -16,6 +16,8 @@ import {
 import PlayerDot from "./PlayerDot";
 import siteLogo from "../assets/logos/dialinlogo.png";
 import resume from "../assets/logos/resumepic.png";
+import rightarrow from "../assets/logos/arrowright.png";
+import leftarrow from "../assets/logos/leftarrow.png";
 
 /**
  * Desktop layout: Football Manager style
@@ -604,12 +606,21 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
           style={{ zIndex: 999 }}
           onClick={() => setShowInfoPage((s) => !s)}
         >
-          <h2 className="text-sm transform rotate-90 origin-left absolute left-4 top-1/2 -translate-y-1/2 whitespace-nowrap">
+          <h2
+            className="flex items-center gap-1 text-sm transform rotate-90 origin-left absolute left-4 top-[20%] -translate-y-1/2 whitespace-nowrap"
+          >
             Selected Player
+            <img
+              src={showInfoPage ? rightarrow : leftarrow}
+              alt="arrow"
+              className="inline-block w-4 h-4 invert"
+            />
+            {selected?.label ?? ""}
           </h2>
 
+
           {showInfoPage && (
-              <div className="w-full overflow-y-auto">
+              <div className="w-[95%] overflow-y-auto ml-auto">
                 {selected ? (
                   selected.logo ? (
                     <div className="h-full w-full bg-gray p-1 rounded-lg items-center justify-center">
