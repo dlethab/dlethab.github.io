@@ -46,8 +46,8 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
   
   
 
-  const DesktopLayout = () => {
-    const [currentFormation, setCurrentFormation] = useState("4-3-3");
+const DesktopLayout = () => {
+  const [currentFormation, setCurrentFormation] = useState("4-3-3");
   const [positions, setPositions] = useState(formation433.map((p) => ({ ...p })));
   const [selectedId, setSelectedId] = useState(manager.id);
   const [hoveredId, setHoveredId] = useState(null);
@@ -409,7 +409,7 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <span className={`h-2.5 w-2.5 rounded-full ${selected.color ?? "bg-indigo-500"}`} />
-            <span className="text-lg font-medium">{selected.label}</span>
+            <span className="text-lg font-medium">{selected.formal}</span>
           </div>
 
           <div className="text-sm text-zinc-200 whitespace-pre-wrap">

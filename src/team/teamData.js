@@ -237,6 +237,7 @@ export const bench = [
   {
     id: "sub-davaco",
     label: "Sub — Davaco (SWE Intern)",
+    formal: "Davaco (SWE Intern)",
     details:
       "• Built SQL Server data warehouse to aggregate business transactions across 4,000+ employees; built automated ETL workflow to integrate Oracle data\n\n• Led SQL reporting infrastructure transformation from SSRS to Power BI, cutting time for analysts to make key insights",
     badge: "SUB",
