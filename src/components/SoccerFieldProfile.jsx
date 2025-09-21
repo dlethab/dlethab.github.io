@@ -565,30 +565,30 @@ const DesktopLayout = () => {
 
     return (
       <div className="relative w-full h-screen bg-zinc-900 text-zinc-100">
- <div
-  className={`
-    w-[90%] flex justify-center items-center gap-3 py-1
-    [@media(min-height:800px)]:gap-5
-    [@media(min-height:800px)]:py-3
-  `}
->
-  <img
-    src="/ball.png"
-    alt="Ball"
-    className="w-10 h-10 object-contain [@media(min-height:800px)]:w-12 [@media(min-height:800px)]:h-12"
-  />
-  <h1
-    className="text-xl font-bold tracking-wide
-               [@media(min-height:800px)]:text-2xl"
-  >
-    Welcome to Dlet FC
-  </h1>
-  <img
-    src="/ball.png"
-    alt="Ball"
-    className="w-10 h-10 object-contain [@media(min-height:800px)]:w-12 [@media(min-height:800px)]:h-12"
-  />
-</div>
+        <div
+          className={`
+            w-[90%] flex justify-center items-center gap-3 py-1
+            [@media(min-height:800px)]:gap-5
+            [@media(min-height:800px)]:py-3
+          `}
+        >
+          <img
+            src="/ball.png"
+            alt="Ball"
+            className="w-10 h-10 object-contain [@media(min-height:800px)]:w-12 [@media(min-height:800px)]:h-12"
+          />
+          <h1
+            className="text-xl font-bold tracking-wide
+                      [@media(min-height:800px)]:text-2xl"
+          >
+            Welcome to Dlet FC
+          </h1>
+          <img
+            src="/ball.png"
+            alt="Ball"
+            className="w-10 h-10 object-contain [@media(min-height:800px)]:w-12 [@media(min-height:800px)]:h-12"
+          />
+        </div>
 
 
 
@@ -600,56 +600,56 @@ const DesktopLayout = () => {
         </div>
 
         <div
-  className={`
-    w-[90%] p-3
-    [@media(min-height:800px)]:p-3
-  `}
-  style={{ zIndex: 1000 }}
->
-  <div
-    className={`
-      flex flex-wrap justify-between gap-2
-      [@media(min-height:800px)]:gap-4
-    `}
-  >
-    {FORMATIONS.map((f) => {
-      const active = currentFormation === f;
-      return (
-        <button
-          key={f}
-          onClick={() => loadFormation(f)}
           className={`
-            px-3 py-1.5 rounded-lg text-sm transition
-            ${active ? "bg-white/10 ring-1 ring-yellow-400" : "bg-white/5 hover:bg-white/10"}
-            [@media(min-height:800px)]:px-5
-            [@media(min-height:800px)]:py-2
-            [@media(min-height:800px)]:text-base
+            w-[90%] p-3
+            [@media(min-height:800px)]:p-3
           `}
-          aria-pressed={active}
+          style={{ zIndex: 1000 }}
         >
-          {f}
-        </button>
-      );
-    })}
+          <div
+            className={`
+              flex flex-wrap justify-between gap-2
+              [@media(min-height:800px)]:gap-4
+            `}
+          >
+            {FORMATIONS.map((f) => {
+              const active = currentFormation === f;
+              return (
+                <button
+                  key={f}
+                  onClick={() => loadFormation(f)}
+                  className={`
+                    px-3 py-1.5 rounded-lg text-sm transition
+                    ${active ? "bg-white/10 ring-1 ring-yellow-400" : "bg-white/5 hover:bg-white/10"}
+                    [@media(min-height:800px)]:px-5
+                    [@media(min-height:800px)]:py-2
+                    [@media(min-height:800px)]:text-base
+                  `}
+                  aria-pressed={active}
+                >
+                  {f}
+                </button>
+              );
+            })}
 
-    {/* Reset button */}
-    <button
-      onClick={() => loadFormation(currentFormation)}
-      title="Reset players to the current formation's default positions"
-      className={`
-        order-last
-        w-auto h-auto px-3 py-1.5 rounded-lg text-sm bg-zinc-700 hover:bg-zinc-600
-        [@media(min-height:800px)]:w-full
-        [@media(min-height:800px)]:h-10
-        [@media(min-height:800px)]:px-0
-        [@media(min-height:800px)]:py-0
-        [@media(min-height:800px)]:text-base
-      `}
-    >
-      Reset
-    </button>
-  </div>
-</div>
+            {/* Reset button */}
+            <button
+              onClick={() => loadFormation(currentFormation)}
+              title="Reset players to the current formation's default positions"
+              className={`
+                order-last
+                w-auto h-auto px-3 py-1.5 rounded-lg text-sm bg-zinc-700 hover:bg-zinc-600
+                [@media(min-height:800px)]:w-full
+                [@media(min-height:800px)]:h-10
+                [@media(min-height:800px)]:px-0
+                [@media(min-height:800px)]:py-0
+                [@media(min-height:800px)]:text-base
+              `}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
 
 
 
@@ -661,7 +661,7 @@ const DesktopLayout = () => {
             h-[90%] bg-zinc-800/95 p-4 transition-all duration-300 ease-in-out
             overflow-y-auto border-t-2 border-zinc-800
             ${showInfoPage ? "w-[80%] translate-x-0" : "w-[10%] translate-x-0"}
-            [@media(min-height:800px)]:h-[83%]
+            [@media(min-height:800px)]:h-[85%]
           `}
           style={{ zIndex: 999 }}
           onClick={() => setShowInfoPage((s) => !s)}
@@ -792,20 +792,20 @@ const DesktopLayout = () => {
           className={`absolute bottom-0 left-0 w-full bg-zinc-800/95 p-4 transition-all duration-300 ease-in-out overflow-y-auto border-t-2 border-zinc-800 ${
             showDepthChart
               ? "h-[75svh] translate-y-0"
-              : "h-[10svh] [@media(min-height:800px)]:h-[17svh] translate-y-0"
+              : "h-[10svh] [@media(min-height:800px)]:h-[15%] translate-y-0"
           }`}
           onClick={() => setShowDepthChart(s => !s)}
           style={{ zIndex: 999 }}
         >
           <h2
-  className={`
-    text-white font-semibold uppercase cursor-pointer
-    text-xl
-    [@media(min-height:800px)]:text-4xl
-  `}
->
-  Depth Chart
-</h2>
+            className={`
+              text-white font-semibold uppercase cursor-pointer
+              text-xl
+              [@media(min-height:800px)]:text-4xl
+            `}
+          >
+            Depth Chart
+          </h2>
 
 
           {showDepthChart && (
@@ -1015,7 +1015,7 @@ function SoccerField({
           }`}
           style={{ left: `${manager.x}%`, top: `${manager.y}%` }}
           data-id={manager.id}
-          onClick={() => setSelectedId(manager.id)}
+          onClick={() => {setSelectedId(manager.id)}}
           onMouseEnter={() => setHoveredId?.(manager.id)}
           onMouseLeave={() => setHoveredId?.(null)}
           title={manager.label}
@@ -1048,7 +1048,7 @@ function SoccerField({
               logo={p.logo}
               color={p.color}
               emphasized={emphasize(p.id)}
-              onClick={() => setSelectedId(p.id)}
+              onClick={() => {setSelectedId(p.id)}}
             />
           ))}
         </DndContext>
