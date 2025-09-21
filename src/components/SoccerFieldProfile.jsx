@@ -510,13 +510,14 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
     //const [selectedId, setSelectedId] = useState(manager.id);
 
       const selected = useMemo(() => {
-    if (!selectedId) return null;
-    return (
-      positions.find((p) => p.id === selectedId) ||
-      bench.find((b) => b.id === selectedId) ||
-      (manager.id === selectedId ? manager : null)  // Return manager if selected
-    );
-  }, []);
+        if (!selectedId) return null;
+        return (
+          positions.find((p) => p.id === selectedId) ||
+          bench.find((b) => b.id === selectedId) ||
+          (manager.id === selectedId ? manager : null)
+          
+        );
+      }, []);
 
     const mDepth = useMemo(() => {
       const all = new Map();
@@ -564,59 +565,119 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
 
     return (
       <div className="relative w-full h-screen bg-zinc-900 text-zinc-100">
-        {/* Formation Selector */}
-        <div className="w-[90%] p-4" style={{ zIndex: 1000 }}>
-          <div className="flex gap-2 flex-wrap justify-between">
-            {FORMATIONS.map((f) => {
-              const active = currentFormation === f;
-              return (
-                <button
-                  key={f}
-                  onClick={() => loadFormation(f)}
-                  className={`px-3 py-1.5 rounded-lg text-sm transition ${
-                    active ? "bg-white/10 ring-1 ring-yellow-400" : "bg-white/5 hover:bg-white/10"
-                  }`}
-                  aria-pressed={active}
-                >
-                  {f}
-                </button>
-              );
-            })}
-            <button
-              onClick={() => { loadFormation(currentFormation); }}
-              className="w-full h-9 rounded-lg text-sm bg-zinc-700 hover:bg-zinc-600"
-              title="Reset players to the current formation's default positions"
-            >
-              Reset
-            </button>
-          </div>
-        </div>
+ <div
+  className={`
+    w-[90%] flex justify-center items-center gap-3 py-1
+    [@media(min-height:800px)]:gap-5
+    [@media(min-height:800px)]:py-3
+  `}
+>
+  <img
+    src="/ball.png"
+    alt="Ball"
+    className="w-10 h-10 object-contain [@media(min-height:800px)]:w-12 [@media(min-height:800px)]:h-12"
+  />
+  <h1
+    className="text-xl font-bold tracking-wide
+               [@media(min-height:800px)]:text-2xl"
+  >
+    Welcome to Dlet FC
+  </h1>
+  <img
+    src="/ball.png"
+    alt="Ball"
+    className="w-10 h-10 object-contain [@media(min-height:800px)]:w-12 [@media(min-height:800px)]:h-12"
+  />
+</div>
+
+
+
+
 
         {/* Field (reusable) */}
         <div className="w-[90%] p-2 rounded-[20px] relative">
           <SoccerField {...fieldProps} />
-        </div>        
+        </div>
+
+        <div
+  className={`
+    w-[90%] p-3
+    [@media(min-height:800px)]:p-3
+  `}
+  style={{ zIndex: 1000 }}
+>
+  <div
+    className={`
+      flex flex-wrap justify-between gap-2
+      [@media(min-height:800px)]:gap-4
+    `}
+  >
+    {FORMATIONS.map((f) => {
+      const active = currentFormation === f;
+      return (
+        <button
+          key={f}
+          onClick={() => loadFormation(f)}
+          className={`
+            px-3 py-1.5 rounded-lg text-sm transition
+            ${active ? "bg-white/10 ring-1 ring-yellow-400" : "bg-white/5 hover:bg-white/10"}
+            [@media(min-height:800px)]:px-5
+            [@media(min-height:800px)]:py-2
+            [@media(min-height:800px)]:text-base
+          `}
+          aria-pressed={active}
+        >
+          {f}
+        </button>
+      );
+    })}
+
+    {/* Reset button */}
+    <button
+      onClick={() => loadFormation(currentFormation)}
+      title="Reset players to the current formation's default positions"
+      className={`
+        order-last
+        w-auto h-auto px-3 py-1.5 rounded-lg text-sm bg-zinc-700 hover:bg-zinc-600
+        [@media(min-height:800px)]:w-full
+        [@media(min-height:800px)]:h-10
+        [@media(min-height:800px)]:px-0
+        [@media(min-height:800px)]:py-0
+        [@media(min-height:800px)]:text-base
+      `}
+    >
+      Reset
+    </button>
+  </div>
+</div>
+
+
 
 
         {/* Info Drawer */}
         <div
-          className={`absolute top-0 right-0 h-[90%] bg-zinc-800/95 p-4 transition-all duration-300 ease-in-out overflow-y-auto border-t-2 border-zinc-800 ${
-            showInfoPage ? "w-[80%] translate-x-0" : "w-[10%] translate-x-0"
-          }`}
+          className={`
+            absolute top-0 right-0
+            h-[90%] bg-zinc-800/95 p-4 transition-all duration-300 ease-in-out
+            overflow-y-auto border-t-2 border-zinc-800
+            ${showInfoPage ? "w-[80%] translate-x-0" : "w-[10%] translate-x-0"}
+            [@media(min-height:800px)]:h-[83%]
+          `}
           style={{ zIndex: 999 }}
           onClick={() => setShowInfoPage((s) => !s)}
         >
           <h2
-            className="flex items-center gap-1 text-sm transform rotate-90 origin-left absolute left-4 top-[20%] -translate-y-1/2 whitespace-nowrap"
+            className="flex items-center gap-2 text-xl transform rotate-90 origin-left absolute left-4 top-[20%] -translate-y-1/2 whitespace-nowrap"
           >
             Selected Player
             <img
               src={showInfoPage ? rightarrow : leftarrow}
               alt="arrow"
-              className="inline-block w-4 h-4 invert"
+              className="inline-block w-9 h-9 invert"
             />
             {selected?.label ?? ""}
           </h2>
+
 
 
           {showInfoPage && (
@@ -687,7 +748,7 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
                       <div className="space-y-3">
                         <div className="flex items-center gap-2">
                           <span className={`h-2.5 w-2.5 rounded-full ${selected.color ?? "bg-indigo-500"}`} />
-                          <span className="text-lg font-medium">{selected.label}</span>
+                          <span className="text-lg font-medium">{selected.formal}</span>
                         </div>
 
                         <div className="text-sm text-zinc-200 whitespace-pre-wrap">
@@ -729,14 +790,23 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
         {/* Depth Chart Section */}
         <div
           className={`absolute bottom-0 left-0 w-full bg-zinc-800/95 p-4 transition-all duration-300 ease-in-out overflow-y-auto border-t-2 border-zinc-800 ${
-            showDepthChart ? "h-[75vh] translate-y-0" : "h-[10vh] translate-y-0"
+            showDepthChart
+              ? "h-[75svh] translate-y-0"
+              : "h-[10svh] [@media(min-height:800px)]:h-[17svh] translate-y-0"
           }`}
-          onClick={() => setShowDepthChart((s) => !s)}
+          onClick={() => setShowDepthChart(s => !s)}
           style={{ zIndex: 999 }}
         >
-          <h2 className="text-white text-xl font-semibold uppercase cursor-pointer">
-            Depth Chart
-          </h2>
+          <h2
+  className={`
+    text-white font-semibold uppercase cursor-pointer
+    text-xl
+    [@media(min-height:800px)]:text-4xl
+  `}
+>
+  Depth Chart
+</h2>
+
 
           {showDepthChart && (
             <div className="mt-2">

@@ -8,10 +8,12 @@ import thermoLogo from "../assets/logos/thermofisher.png";
 import dlet from "../assets/logos/dlet.png";
 
 import resume from "../Dlet Habtemariam - Resume.pdf"
+import { label } from "framer-motion/client";
 
 export const manager = {
   id: "manager",
   label: "Dlet Habtemariam",
+  formal: label,
   details:
     "Hello! Welcome to my interactive portfolio! Click on the player dots to explore different sections, and use the depth chart to see detailed information about my projects, skills, and resume.",
   description: " A little about me: I love building cool projects, coding, drawing and playing soccer!",
@@ -36,7 +38,8 @@ export const manager = {
 const FWD_LW_ERICSSON = {
   id: "lw-ericsson",
   label: "LW — Ericsson (SWE Intern)",
-  details: "• Built and maintained CI/CD pipelines using GitLab, Docker, and Kubernetes to automate deployment workflows and reduce integration errors; Engineered a reusable QA testing framework with Allure dashboards and Helm-based test environments, accelerating delivery cycles by 10%\n\n• Developed microservices that leveraged Kafka for event-driven messaging and PostgreSQL for persistent storage; wrote internal documentation and reintegration guides adopted across teams; contributed to Agile sprints, code reviews, and testing coverage improvements",
+  formal: "Ericsson (SWE Intern)",
+  details: "• Automated QA testing framework and deployed onto CI/CD pipeline using Gitlab, Docker and Kubernetes to save developers ~2 hours a week in QA, displayed testing results to Allure dashboard\n\n• Wrote documentation & reintegration guide for other development teams to easily adopt",
   dates: "May 2023 - Dec 2023",
   tools: "GitLab, Docker, Kubernetes, Helm, Allure, YAML",
   x: 28,
@@ -51,6 +54,7 @@ const FWD_LW_ERICSSON = {
 const FWD_ST_CHARTBEAT = {
   id: "st-chartbeat",
   label: "ST — Chartbeat (SWE Intern)",
+  formal: "Chartbeat (SWE Intern)",
   details:
   "• Built internal monitoring and observability system for Generative AI tool, providing insights into system performance, and reducing issue detection time by 80% using Kafka, time-series data, Nagios alerts, and a Grafana dashboard\n\n• Designed data scraping solution to detect and bypass login-gated pages using Python and PostgreSQL to reduce data scraping failures by 70%",
   x: 50,
@@ -66,6 +70,7 @@ const FWD_ST_CHARTBEAT = {
 const FWD_RW_THERMO = {
   id: "rw-thermofisher",
   label: "RW — Thermo Fisher Scientific (SWE Intern)",
+  formal: "Thermo Fisher Scientific (SWE Intern)",
   details:
     "• Led automation efforts for critical financial processes by designing Celonis Process Mining graphs to track and visualize bottlenecks and inefficiencies\n\n• Developed Python and SQL solutions to reduce data workflow errors, delivering 15% improvements on data quality",
   x: 72,
@@ -82,6 +87,7 @@ const FWD_RW_THERMO = {
 const MID_LCM_DIALIN = {
   id: "lcm-dialin",
   label: "LCM — Dial In (Project)",
+  formal: "Dial In",
   details:
     "• Creator and developer; Cryptic number-decoding game with hundreds of plays and 80% user retention rate\n\n• Researched and developed precise length control solution for LLM to generate multi word phrases of length 10",
   x: 35,
@@ -96,6 +102,7 @@ const MID_LCM_DIALIN = {
 const MID_CDM_SOCCER_SITE = {
   id: "cdm-soccer-site",
   label: "CDM — Soccer Personal Site (Project)",
+  formal: "Soccer Personal Site",
   details:
     "This interactive soccer-formation resume site; Tailwind, dnd-kit, React; formation presets & drag.",
   x: 50,
@@ -110,6 +117,7 @@ const MID_CDM_SOCCER_SITE = {
 const MID_RCM_UTDNSBE = {
   id: "rcm-utdnsbe",
   label: "RCM — UTD NSBE Website (Project)",
+  formal: "UTD NSBE Website",
   details:
     "Chapter website to engage 100+ members with events/resources; simple CMS and responsive UI.",
   x: 65,
@@ -140,6 +148,7 @@ const MID_RM_IOS_THEME = {
 const DEF_LB_NSBE_FINANCE = {
   id: "lb-nsbe-finance",
   label: "LB — UTD NSBE Finance Chair",
+  formal: "UTD NSBE Finance Chair",
   details:
     "• Raised over $6,000 in chapter funds through corporate outreach, local fundraising, and scholarships\n\n• Led a STEM focused Lego Robotics camp for low-income middle school students in Dallas; taught functional programming skills and basic robotic hardware using Lego Spike Prime kits",
   x: 20,
@@ -153,6 +162,7 @@ const DEF_LB_NSBE_FINANCE = {
 const DEF_LCB_HACKNY = {
   id: "lcb-hackny",
   label: "LCB — HackNY Fellow",
+  formal: "HackNY Fellow",
   details: "• Selected as 1 of 20 fellows for a prestigious NYC based tech fellowship with less than a 3% acceptance rate\n\n• Engaged with tech founders, CEOs, CTOs, civic leaders, and engineers from the NYC startup ecosystem",
   x: 38,
   y: 70,
@@ -165,6 +175,7 @@ const DEF_LCB_HACKNY = {
 const DEF_RCB_NSBE_SENATOR = {
   id: "rcb-nsbe-senator",
   label: "RCB — UTD NSBE Senator",
+  formal: "UTD NSBE Senator",
   details: "Represented UTD NSBE chapter at regional and national conferences; voted on key organizational policies and initiatives.\n\nActed as a liaison between with Student Government Association to advocate for STEM students on campus.",
   x: 62,
   y: 70,
@@ -177,6 +188,7 @@ const DEF_RCB_NSBE_SENATOR = {
 const DEF_RB_TEMP = {
   id: "rb-nsbe-mentor",
   label: "RB — UTD NSBE Mentor",
+  formal: "UTD NSBE Mentor",
   details: "Currently mentoring underclassmen. Guiding them through course selection, tutoring, project help, internships, and career advice.",
   x: 80,
   y: 65,
@@ -189,6 +201,7 @@ const DEF_RB_TEMP = {
 const GK_TEMP = {
   id: "gk-temp-award",
   label: "GK — Temporary (Award)",
+  formal: "Temporary (Award)",
   details: "Placeholder for award/honor.",
   x: 50,
   y: 90,
