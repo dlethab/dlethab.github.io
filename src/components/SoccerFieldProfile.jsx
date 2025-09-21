@@ -568,7 +568,7 @@ const DesktopLayout = () => {
         <div
           className={`
             w-[90%] flex justify-center items-center gap-3 py-1
-            [@media(min-height:800px)]:gap-5
+            [@media(min-height:800px)]:gap-11
             [@media(min-height:800px)]:py-3
           `}
         >
