@@ -766,7 +766,7 @@ const MobileLayout = () => {
 {/* Info Drawer (no onClick here!) */}
 <div
   className={`
-    absolute top-0 right-0 z-[999]
+    overflow-y-auto absolute top-0 right-0 z-[999]
     h-[90%] bg-zinc-800/95 p-4 border-t-2 border-zinc-800
     transform-gpu will-change-transform transition-transform duration-300 ease-in-out
     ${isInfoOpen ? "w-[80%]" : "w-[10%]"}
