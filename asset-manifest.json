@@ -1,20 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.c473fab0.css",
-    "main.js": "/static/js/main.8dce4ff7.js",
-    "static/js/453.f36dbc51.chunk.js": "/static/js/453.f36dbc51.chunk.js",
+    "main.css": "/static/css/main.57006c32.css",
+    "main.js": "/static/js/main.03663a8a.js",
+    "static/js/453.ce1f5fd3.chunk.js": "/static/js/453.ce1f5fd3.chunk.js",
     "static/media/dlet.png": "/static/media/dlet.9d88d31bfdf5694c3a95.png",
     "static/media/resumepic.png": "/static/media/resumepic.39924814aab089026dd9.png",
     "static/media/Dlet Habtemariam - Resume.pdf": "/static/media/Dlet Habtemariam - Resume.7fdc21cf82029d3b4ea6.pdf",
-    "static/media/thermofisher.png": "/static/media/thermofisher.faabfbdb07d1dae8ee24.png",
-    "static/media/ericsson.png": "/static/media/ericsson.5bab32c68b174a10b943.png",
+    "static/media/thermofisher.png": "/static/media/thermofisher.fdadfcde624e36bb9e3a.png",
     "index.html": "/index.html",
-    "main.c473fab0.css.map": "/static/css/main.c473fab0.css.map",
-    "main.8dce4ff7.js.map": "/static/js/main.8dce4ff7.js.map",
-    "453.f36dbc51.chunk.js.map": "/static/js/453.f36dbc51.chunk.js.map"
+    "main.57006c32.css.map": "/static/css/main.57006c32.css.map",
+    "main.03663a8a.js.map": "/static/js/main.03663a8a.js.map",
+    "453.ce1f5fd3.chunk.js.map": "/static/js/453.ce1f5fd3.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c473fab0.css",
-    "static/js/main.8dce4ff7.js"
+    "static/css/main.57006c32.css",
+    "static/js/main.03663a8a.js"
   ]
 }
