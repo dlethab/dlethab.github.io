@@ -1,4 +1,5 @@
-import React, { useMemo, useState, useRef, useEffect } from "react";
+import React, { useMemo, useState, useRef, useEffect, useReducer} from "react";
+
 import {
   DndContext,
   useSensor,
@@ -18,12 +19,43 @@ import siteLogo from "../assets/logos/dialinlogo.png";
 import resume from "../assets/logos/resumepic.png";
 import rightarrow from "../assets/logos/arrowright.png";
 import leftarrow from "../assets/logos/leftarrow.png";
+import { select } from "framer-motion/client";
 
 /**
  * Desktop layout: Football Manager style
  * - 3-column grid: Field | Selected Player | Depth Chart
  * - Hover/select highlights on field + depth chart
  */
+
+ function infoReducer(state, action) {
+  switch (action.type) {
+    case "OPEN":
+      return "open";
+    case "CLOSE":
+      return "closed";
+    case "TOGGLE":
+      return state === "open" ? "closed" : "open";
+    default:
+      return state;
+  }
+}
+
+// Depth Chart reducer
+function depthReducer(state, action) {
+  switch (action.type) {
+    case "OPEN":
+      return "expanded";
+    case "CLOSE":
+      return "collapsed";
+    case "TOGGLE":
+      return state === "expanded" ? "collapsed" : "expanded";
+    case "SELECT": // selecting an item collapses the chart
+      return "collapsed";
+    default:
+      return state;
+  }
+}
+
 export default function SoccerFieldProfile({ title = "My Lineup" }) {
   const [currentFormation, setCurrentFormation] = useState("4-3-3");
   const [positions, setPositions] = useState(formation433.map((p) => ({ ...p })));
@@ -33,12 +65,35 @@ export default function SoccerFieldProfile({ title = "My Lineup" }) {
   const FORMATIONS = ["4-3-3", "4-2-3-1", "4-4-2"];
   const isDesktop = useIsDesktop();
 
+  const [selected, setSelected] = useState(null);
+  const [infoState, dispatchInfo] = useReducer(infoReducer, "closed");
+  const [depthState, dispatchDepth] = useReducer(depthReducer, "collapsed");
+
+  const isInfoOpen = infoState === "open";
+  const isDepthExpanded = depthState === "expanded";
+  
+
   const isEmphasized = (id) => id === selectedId || id === hoveredId;
 
+  // if you had a useEffect that opens on selection change, gate it:
+  useEffect(() => {
+    if (selectionSourceRef.current === "user") {
+      dispatchInfo({ type: "OPEN" });
+    }
+    selectionSourceRef.current = null;
+  }, [selectedId]);
+
+  const selectFromField = (id) => {
+    selectionSourceRef.current = "user";
+    setSelectedId(id);
+  };
+
+  const selectionSourceRef = useRef(null);
   function loadFormation(name) {
     let preset = formation433;
     if (name === "4-4-2") preset = formation442;
     if (name === "4-2-3-1") preset = formation4231;
+    selectionSourceRef.current = "system";
     setCurrentFormation(name);
     setPositions(preset.map((p) => ({ ...p })));
     setSelectedId(manager.id);
@@ -388,6 +443,25 @@ const DesktopLayout = () => {
             <p>{selected.description}</p>
             <p className="mt-2">School: <span className="text-[#006747]">{selected.school}</span></p>
             <p className="mt-1">Graduation Date: <span className="text-[#FF5F00]">{selected.gradDate}</span></p>
+            {/* Text-only links */}
+              <div className="mt-3 flex gap-4 text-sm">
+                <a
+                  href={selected.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 underline"
+                >
+                  LinkedIn
+                </a>
+                <a
+                  href={selected.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-pink-600 hover:text-pink-500 underline"
+                >
+                  GitHub
+                </a>
+              </div>
           </div>
 
           {/* Resume Image */}
@@ -405,37 +479,75 @@ const DesktopLayout = () => {
           </div>
         </div>
       ) : (
-        // Default layout for other players
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <span className={`h-2.5 w-2.5 rounded-full ${selected.color ?? "bg-indigo-500"}`} />
-            <span className="text-lg font-medium">{selected.formal}</span>
-          </div>
+        // Default layout for other players (projects + non-projects)
+<div className="space-y-3">
+  <div className="flex items-center gap-2">
+    <span className={`h-2.5 w-2.5 rounded-full ${selected.color ?? "bg-indigo-500"}`} />
+    <span className="text-lg font-medium">{selected.formal}</span>
+  </div>
 
-          <div className="text-sm text-zinc-200 whitespace-pre-wrap">
-            {selected.details}
-          </div>
+  <div className="text-sm text-zinc-200 whitespace-pre-wrap">
+    {selected.details}
+  </div>
 
-          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
-            <div>
-              <dt className="text-zinc-400">Dates</dt>
-              <dd className="text-zinc-100">{selected.dates || "Add dates in teamData.js"}</dd>
-            </div>
-            <div>
-              <dt className="text-zinc-400">Tools</dt>
-              <dd className="text-zinc-100">{selected.tools || "Add tools in teamData.js"}</dd>
-            </div>
-          </dl>
+<dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+  <div>
+    <dt className="text-zinc-400">Dates</dt>
+    <dd className="text-zinc-100">
+      {selected?.dates ?? "Add dates in teamData.js"}
+    </dd>
+  </div>
 
-          {"href" in selected && selected.href && (
-            <a
-              href={selected.href}
-              className="inline-flex items-center gap-2 text-indigo-300 hover:text-indigo-200 underline"
-            >
-              Learn more ↗
-            </a>
-          )}
-        </div>
+  {/* Only show Tools if not award/leadership */}
+  {selected?.type !== "org" && (
+    <div>
+      <dt className="text-zinc-400">Tools</dt>
+      <dd className="text-zinc-100">
+        {selected?.tools ?? "Add tools in teamData.js"}
+      </dd>
+    </div>
+  )}
+</dl>
+
+{/* inline, project-only links; shows if either exists */}
+{(selected?.type === "project" || selected?.demo || selected?.github) && (selected?.demo || selected?.github) && (
+  <div className="mt-2 flex flex-wrap gap-2">
+    {selected?.demo && (
+      <a
+        href={selected.demo}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-indigo-600/80 hover:bg-indigo-600 transition text-white text-sm ring-1 ring-white/10"
+      >
+        Demo ↗
+      </a>
+    )}
+    {selected?.github && (
+      <a
+        href={selected.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-zinc-700/80 hover:bg-zinc-700 transition text-white text-sm ring-1 ring-white/10"
+      >
+        GitHub ↗
+      </a>
+    )}
+  </div>
+)}
+
+
+
+  {"href" in selected && selected.href && (
+    <a
+      href={selected.href}
+      className="inline-flex items-center gap-2 text-indigo-300 hover:text-indigo-200 underline"
+      target="_blank"
+      rel="noreferrer"
+    >
+      Learn more ↗
+    </a>
+  )}
+</div>
       )
     ) : (
       <div className="text-sm text-zinc-400">
@@ -492,362 +604,432 @@ const DesktopLayout = () => {
   );
 }
 
-  const MobileLayout = () => {
-      // Shared props for the reusable SoccerField
-      const fieldProps = {
-        positions,
-        setPositions,
-        selectedId,
-        setSelectedId,
-        hoveredId,
-        setHoveredId,
-        manager,
-        isEmphasized,
-      };
+const MobileLayout = () => {
+  // STATE: selected / hovered come from parent scope
+  // STATE MACHINES
+  const [infoState, dispatchInfo] = useReducer(infoReducer, "open");       // start OPEN
+  const [depthState, dispatchDepth] = useReducer(depthReducer, "collapsed");
 
-    const [showDepthChart, setShowDepthChart] = useState(false);
-    const [showInfoPage, setShowInfoPage] = useState(false);
-    //const [selectedId, setSelectedId] = useState(manager.id);
+  const isInfoOpen = infoState === "open";
+  const isDepthExpanded = depthState === "expanded";
 
-      const selected = useMemo(() => {
-        if (!selectedId) return null;
-        return (
-          positions.find((p) => p.id === selectedId) ||
-          bench.find((b) => b.id === selectedId) ||
-          (manager.id === selectedId ? manager : null)
-          
-        );
-      }, []);
+  // When selecting from FIELD, also open info
+  const selectFromField = (id) => {
+    setSelectedId(id);
+    dispatchInfo({ type: "OPEN" });
+  };
 
-    const mDepth = useMemo(() => {
-      const all = new Map();
-      [...formation433, ...bench].forEach((p) => all.set(p.id, p));
+  // Reuse SoccerField but inject our select hook
+  const fieldProps = {
+    positions,
+    setPositions,
+    selectedId,
+    setSelectedId: selectFromField, // <-- open info when dot clicked
+    hoveredId,
+    setHoveredId,
+    manager,
+    isEmphasized,
+  };
 
-      const EXPERIENCE_IDS = new Set([
-        "lw-ericsson",
-        "st-chartbeat",
-        "rw-thermofisher",
-        "sub-davaco",
-      ]);
-
-      const PROJECT_IDS = new Set([
-        "lcm-dialin",
-        "rcm-utdnsbe",
-        "cdm-soccer-site",
-        "rm-ios-theme",
-      ]);
-
-      const ORG_IDS = new Set([
-        "lb-nsbe-finance",
-        "lcb-hackny",
-        "rcb-nsbe-senator",
-        "rb-nsbe-mentor",
-        "gk-temp-award",
-      ]);
-
-      const forwards = [];
-      const mids = [];
-      const defs = [];
-
-      for (const p of all.values()) {
-        if (EXPERIENCE_IDS.has(p.id)) forwards.push(p);
-        else if (PROJECT_IDS.has(p.id)) mids.push(p);
-        else if (ORG_IDS.has(p.id)) defs.push(p);
-      }
-
-      return {
-        forwards,
-        midfielders: mids,
-        defenders: defs,
-        manager: [manager],
-      };
-    }, []);
-
+  // CURRENT SELECTION OBJECT
+  const selected = useMemo(() => {
+    if (!selectedId) return null;
     return (
-      <div className="relative w-full h-screen bg-zinc-900 text-zinc-100">
-        <div
-          className={`
-            w-[90%] flex justify-center items-center gap-3 py-1
-            [@media(min-height:800px)]:gap-15
-            [@media(min-height:800px)]:py-3
-          `}
+      positions.find((p) => p.id === selectedId) ||
+      bench.find((b) => b.id === selectedId) ||
+      (manager.id === selectedId ? manager : null)
+    );
+  }, [positions, selectedId]);
+
+  // mDepth (forwards / mids / defs / manager)
+  const mDepth = useMemo(() => {
+    const all = new Map();
+    [...formation433, ...bench].forEach((p) => all.set(p.id, p));
+
+    const EXPERIENCE_IDS = new Set([
+      "lw-ericsson",
+      "st-chartbeat",
+      "rw-thermofisher",
+      "sub-davaco",
+    ]);
+    const PROJECT_IDS = new Set([
+      "lcm-dialin",
+      "rcm-utdnsbe",
+      "cdm-soccer-site",
+      "rm-ios-theme",
+    ]);
+    const ORG_IDS = new Set([
+      "lb-nsbe-finance",
+      "lcb-hackny",
+      "rcb-nsbe-senator",
+      "rb-nsbe-mentor",
+      "gk-temp-award",
+    ]);
+
+    const forwards = [];
+    const mids = [];
+    const defs = [];
+
+    for (const p of all.values()) {
+      if (EXPERIENCE_IDS.has(p.id)) forwards.push(p);
+      else if (PROJECT_IDS.has(p.id)) mids.push(p);
+      else if (ORG_IDS.has(p.id)) defs.push(p);
+    }
+
+    return { forwards, midfielders: mids, defenders: defs, manager: [manager] };
+  }, []);
+
+  // SWIPES
+  const infoSwipeStart = useRef(null);
+  const depthSwipeStart = useRef(null);
+
+  const handleInfoTouchStart = (e) => (infoSwipeStart.current = e.touches[0].clientX);
+  const handleInfoTouchEnd = (e) => {
+    const dx = e.changedTouches[0].clientX - (infoSwipeStart.current ?? 0);
+    if (dx > 50) dispatchInfo({ type: "CLOSE" }); // swipe RIGHT to close
+    infoSwipeStart.current = null;
+  };
+
+  const handleDepthTouchStart = (e) => (depthSwipeStart.current = e.touches[0].clientY);
+  const handleDepthTouchEnd = (e) => {
+    const dy = e.changedTouches[0].clientY - (depthSwipeStart.current ?? 0);
+    if (dy > 50) dispatchDepth({ type: "CLOSE" }); // swipe DOWN to close
+    depthSwipeStart.current = null;
+  };
+
+  return (
+    <div className="relative w-full h-screen bg-zinc-900 text-zinc-100">
+      {/* Click-away overlay for INFO (closes on outside click) */}
+      {isInfoOpen && (
+        <button
+          aria-hidden
+          onClick={() => dispatchInfo({ type: "CLOSE" })}
+          className="fixed inset-0"
+          style={{ zIndex: 998, background: "transparent" }}
+        />
+      )}
+
+      {/* Header: clicking title toggles INFO */}
+      <div className="w-[90%] flex justify-center items-center gap-3 py-1 relative z-[1]">
+        <img src="/ball.png" alt="Ball" className="w-10 h-10" />
+        <h1
+          onClick={() => dispatchInfo({ type: "TOGGLE" })}
+          className="text-xl font-bold tracking-wide"
         >
-          <img
-            src="/ball.png"
-            alt="Ball"
-            className="w-10 h-10 object-contain [@media(min-height:800px)]:w-12 [@media(min-height:800px)]:h-12"
-          />
-          <h1
-            className="text-xl font-bold tracking-wide
-                      [@media(min-height:800px)]:text-2xl"
+          Welcome to Dlet FC
+        </h1>
+        <img src="/ball.png" alt="Ball" className="w-10 h-10" />
+      </div>
+
+      {/* Field */}
+      <div className="w-[90%] p-2 rounded-[20px] relative z-[1]">
+        <SoccerField {...fieldProps} />
+      </div>
+
+      {/* Formation controls (unchanged) */}
+      <div className="w-[90%] p-3 relative z-[1]">
+        <div className="flex flex-wrap justify-between gap-2">
+          {["4-3-3", "4-2-3-1", "4-4-2"].map((f) => {
+            const active = currentFormation === f;
+            return (
+              <button
+                key={f}
+                onClick={() => loadFormation(f)}
+                className={`px-3 py-1.5 rounded-lg text-sm transition ${
+                  active ? "bg-white/10 ring-1 ring-yellow-400" : "bg-white/5 hover:bg-white/10"
+                }`}
+                aria-pressed={active}
+              >
+                {f}
+              </button>
+            );
+          })}
+          <button
+            onClick={() => loadFormation(currentFormation)}
+            title="Reset players"
+            className="order-last w-auto h-auto px-3 py-1.5 rounded-lg text-sm bg-zinc-700 hover:bg-zinc-600"
           >
-            Welcome to Dlet FC
-          </h1>
-          <img
-            src="/ball.png"
-            alt="Ball"
-            className="w-10 h-10 object-contain [@media(min-height:800px)]:w-12 [@media(min-height:800px)]:h-12"
-          />
-        </div>
-
-
-
-
-
-        {/* Field (reusable) */}
-        <div className="w-[90%] p-2 rounded-[20px] relative">
-          <SoccerField {...fieldProps} />
-        </div>
-
-        <div
-          className={`
-            w-[90%] p-3
-            [@media(min-height:800px)]:p-3
-          `}
-          style={{ zIndex: 1000 }}
-        >
-          <div
-            className={`
-              flex flex-wrap justify-between gap-2
-              [@media(min-height:800px)]:gap-4
-            `}
-          >
-            {FORMATIONS.map((f) => {
-              const active = currentFormation === f;
-              return (
-                <button
-                  key={f}
-                  onClick={() => loadFormation(f)}
-                  className={`
-                    px-3 py-1.5 rounded-lg text-sm transition
-                    ${active ? "bg-white/10 ring-1 ring-yellow-400" : "bg-white/5 hover:bg-white/10"}
-                    [@media(min-height:800px)]:px-5
-                    [@media(min-height:800px)]:py-2
-                    [@media(min-height:800px)]:text-base
-                  `}
-                  aria-pressed={active}
-                >
-                  {f}
-                </button>
-              );
-            })}
-
-            {/* Reset button */}
-            <button
-              onClick={() => loadFormation(currentFormation)}
-              title="Reset players to the current formation's default positions"
-              className={`
-                order-last
-                w-auto h-auto px-3 py-1.5 rounded-lg text-sm bg-zinc-700 hover:bg-zinc-600
-                [@media(min-height:800px)]:w-full
-                [@media(min-height:800px)]:h-10
-                [@media(min-height:800px)]:px-0
-                [@media(min-height:800px)]:py-0
-                [@media(min-height:800px)]:text-base
-              `}
-            >
-              Reset
-            </button>
-          </div>
-        </div>
-
-
-
-
-        {/* Info Drawer */}
-        <div
-          className={`
-            absolute top-0 right-0
-            h-[90%] bg-zinc-800/95 p-4 transition-all duration-300 ease-in-out
-            overflow-y-auto border-t-2 border-zinc-800
-            ${showInfoPage ? "w-[80%] translate-x-0" : "w-[10%] translate-x-0"}
-            [@media(min-height:800px)]:h-[85%]
-          `}
-          style={{ zIndex: 999 }}
-          onClick={() => setShowInfoPage((s) => !s)}
-        >
-          <h2
-            className="flex items-center gap-2 text-xl transform rotate-90 origin-left absolute left-4 top-[20%] -translate-y-1/2 whitespace-nowrap"
-          >
-            Selected Player
-            <img
-              src={showInfoPage ? rightarrow : leftarrow}
-              alt="arrow"
-              className="inline-block w-9 h-9 invert"
-            />
-            {selected?.label ?? ""}
-          </h2>
-
-
-
-          {showInfoPage && (
-              <div className="w-[95%] overflow-y-auto ml-auto">
-                {selected ? (
-                  selected.logo ? (
-                    <div className="h-full w-full bg-gray p-1 rounded-lg items-center justify-center">
-                      <img
-                        src={selected.logo}
-                        alt={`${selected.label} logo`}
-                        className="w-64 h-60 object-contain rounded-2xl ring-1 ring-white/20 bg-white/5 p-3 no-native-dnd"
-                        draggable={false}
-                        onDragStart={(e) => e.preventDefault()}
-                        onError={(e) => { e.currentTarget.src = "/logos/fallback.png"; }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="h-full w-full items-center justify-center p-2">
-                      <div
-                          className={`size-56 ${selected.color ?? "bg-indigo-500"} rounded-full ring-2 ring-white 
-                                      grid place-items-center text-4xl text-white shadow-lg object-contain mx-auto`}
-                        aria-hidden
-                      >
-                        {selected.icon || "•"}
-                      </div>
-                    </div>
-                  )
-                ) : (
-                  <div className="h-full w-full flex items-center justify-center text-sm text-zinc-400">
-                    Pick a player to see their logo here.
-                  </div>
-                )}
-                  {/* Info (top 2/3) */}
-                <div className="p-4 min-h-0 overflow-auto flex flex-col gap-3 pt-0"> {/* pt-0 removes top padding for manager */}
-                  <h2 className="text-sm font-semibold tracking-wide uppercase text-zinc-300">
-                    {selected && selected.id === "manager" ? "Manager" : "Selected Player"}
-                  </h2>
-
-
-                  {selected ? (
-                    selected.id === "manager" ? (
-                      // Custom layout for manager intro
-                      <div className="space-y-3">
-                        <h3 className="text-xl font-semibold text-white">{selected.label}</h3>
-                        <p className="text-sm text-zinc-200">{selected.details}</p>
-                        <div className="text-sm text-zinc-300">
-                          <p>{selected.description}</p>
-                          <p className="mt-2">School: <span className="text-[#006747]">{selected.school}</span></p>
-                          <p className="mt-1">Graduation Date: <span className="text-[#FF5F00]">{selected.gradDate}</span></p>
-                        </div>
-
-                        {/* Resume Image */}
-                        <div className="mt-6">
-                          <p className="text-zinc-200">Click below to view my resume:</p>
-                          <a href={selected.resumeFile} target="_blank" rel="noopener noreferrer">
-                            <div className="mt-2 flex justify-center">
-                              <img
-                                src={resume}
-                                alt="Resume"
-                                className="w-40 h-55 cursor-pointer rounded-lg shadow-lg bg-white p-2"
-                              />
-                            </div>
-                          </a>
-                        </div>
-                      </div>
-                    ) : (
-                      // Default layout for other players
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-2">
-                          <span className={`h-2.5 w-2.5 rounded-full ${selected.color ?? "bg-indigo-500"}`} />
-                          <span className="text-lg font-medium">{selected.formal}</span>
-                        </div>
-
-                        <div className="text-sm text-zinc-200 whitespace-pre-wrap">
-                          {selected.details}
-                        </div>
-
-                        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
-                          <div>
-                            <dt className="text-zinc-400">Dates</dt>
-                            <dd className="text-zinc-100">{selected.dates || "Add dates in teamData.js"}</dd>
-                          </div>
-                          <div>
-                            <dt className="text-zinc-400">Tools</dt>
-                            <dd className="text-zinc-100">{selected.tools || "Add tools in teamData.js"}</dd>
-                          </div>
-                        </dl>
-
-                        {"href" in selected && selected.href && (
-                          <a
-                            href={selected.href}
-                            className="inline-flex items-center gap-2 text-indigo-300 hover:text-indigo-200 underline"
-                          >
-                            Learn more ↗
-                          </a>
-                        )}
-                      </div>
-                    )
-                  ) : (
-                    <div className="text-sm text-zinc-400">
-                      Select a dot on the field to see full details, dates, and tools.
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-          )}
-        </div>
-
-        {/* Depth Chart Section */}
-        <div
-          className={`absolute bottom-0 left-0 w-full bg-zinc-800/95 p-4 transition-all duration-300 ease-in-out overflow-y-auto border-t-2 border-zinc-800 ${
-            showDepthChart
-              ? "h-[75svh] translate-y-0"
-              : "h-[10svh] [@media(min-height:800px)]:h-[15%] translate-y-0"
-          }`}
-          onClick={() => setShowDepthChart(s => !s)}
-          style={{ zIndex: 999 }}
-        >
-          <h2
-            className={`
-              text-white font-semibold uppercase cursor-pointer
-              text-xl
-              [@media(min-height:800px)]:text-4xl
-            `}
-          >
-            Depth Chart
-          </h2>
-
-
-          {showDepthChart && (
-            <div className="mt-2">
-              <DepthGroup
-                title="Manager - Dlet Habtemariam"
-                items={mDepth.manager}
-                onSelect={setSelectedId}
-                onHover={setHoveredId}
-                selectedId={selectedId}
-                hoveredId={hoveredId}
-              />
-              <DepthGroup
-                title="Forwards — Work Experience"
-                items={mDepth.forwards}
-                onSelect={setSelectedId}
-                onHover={setHoveredId}
-                selectedId={selectedId}
-                hoveredId={hoveredId}
-              />
-              <DepthGroup
-                title="Midfielders — Projects"
-                items={mDepth.midfielders}
-                onSelect={setSelectedId}
-                onHover={setHoveredId}
-                selectedId={selectedId}
-                hoveredId={hoveredId}
-              />
-              <DepthGroup
-                title="Defenders/GK — Orgs & Awards"
-                items={mDepth.defenders}
-                onSelect={setSelectedId}
-                onHover={setHoveredId}
-                selectedId={selectedId}
-                hoveredId={hoveredId}
-              />
-            </div>
-          )}
+            Reset
+          </button>
         </div>
       </div>
-    );
-  };
+
+      {/* Click-away overlay: only when OPEN, closes on click */}
+{isInfoOpen && (
+  <button
+    aria-hidden
+    onClick={() => dispatchInfo({ type: "CLOSE" })}
+    className="fixed inset-0 z-[998] bg-transparent"
+  />
+)}
+
+{/* Info Drawer (no onClick here!) */}
+<div
+  className={`
+    absolute top-0 right-0 z-[999]
+    h-[90%] bg-zinc-800/95 p-4 border-t-2 border-zinc-800
+    transform-gpu will-change-transform transition-transform duration-300 ease-in-out
+    ${isInfoOpen ? "w-[80%]" : "w-[10%]"}
+    [@media(min-height:800px)]:h-[85%]
+  `}
+  // Remove the old onClick that toggled here
+  // If you still want "click background of panel to close", use onClick with guard:
+  onClick={(e) => {
+    // Only close if you click the panel background itself, not any children
+    if (e.currentTarget === e.target && isInfoOpen) {
+      dispatchInfo({ type: "CLOSE" });
+    }
+  }}
+  onTouchStart={handleInfoTouchStart}
+  onTouchEnd={handleInfoTouchEnd}
+>
+
+  {/* Title/handle: the ONLY element that toggles open/close explicitly */}
+  <h2
+    onClick={() => dispatchInfo({ type: "TOGGLE" })}
+    className="cursor-pointer flex items-center gap-2 text-xl transform rotate-90 origin-left absolute left-4 top-[20%] -translate-y-1/2 whitespace-nowrap select-none"
+  >
+    Selected Player
+    <img
+      src={isInfoOpen ? rightarrow : leftarrow}
+      alt="arrow"
+      className="inline-block w-9 h-9 invert"
+    />
+    {selected?.label ?? ""}
+  </h2>
+
+        {isInfoOpen && (
+          <div className="w-[95%] overflow-y-auto ml-auto">
+            {/* --- FULL VISUALS (your original layout) --- */}
+            {selected ? (
+              selected.logo ? (
+                <div className="h-full w-full bg-gray p-1 rounded-lg items-center justify-center">
+                  <img
+                    src={selected.logo}
+                    alt={`${selected.label} logo`}
+                    className="w-64 h-60 object-contain rounded-2xl ring-1 ring-white/20 bg-white/5 p-3 no-native-dnd"
+                    draggable={false}
+                    onDragStart={(e) => e.preventDefault()}
+                    onError={(e) => { e.currentTarget.src = "/logos/fallback.png"; }}
+                  />
+                </div>
+              ) : (
+                <div className="h-full w-full items-center justify-center p-2">
+                  <div
+                    className={`size-56 ${selected.color ?? "bg-indigo-500"} rounded-full ring-2 ring-white 
+                                grid place-items-center text-4xl text-white shadow-lg object-contain mx-auto`}
+                    aria-hidden
+                  >
+                    {selected.icon || "•"}
+                  </div>
+                </div>
+              )
+            ) : (
+              <div className="h-full w-full flex items-center justify-center text-sm text-zinc-400">
+                Pick a player to see their logo here.
+              </div>
+            )}
+
+            {/* Info (top 2/3) */}
+            <div className="p-4 min-h-0 overflow-auto flex flex-col gap-3 pt-0">
+              <h2 className="text-sm font-semibold tracking-wide uppercase text-zinc-300">
+                {selected && selected.id === "manager" ? "Manager" : "Selected Player"}
+              </h2>
+
+              {selected ? (
+                selected.id === "manager" ? (
+                  // Manager layout
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-semibold text-white">{selected.label}</h3>
+                    <p className="text-sm text-zinc-200">{selected.details}</p>
+                    <div className="text-sm text-zinc-300">
+                      <p>{selected.description}</p>
+                      <p className="mt-2">School: <span className="text-[#006747]">{selected.school}</span></p>
+                      <p className="mt-1">Graduation Date: <span className="text-[#FF5F00]">{selected.gradDate}</span></p>
+                      <div className="mt-3 flex gap-4 text-sm">
+                        <a
+                          href={selected.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-400 hover:text-blue-300 underline"
+                        >
+                          LinkedIn
+                        </a>
+                        <a
+                          href={selected.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-pink-600 hover:text-pink-500 underline"
+                        >
+                          GitHub
+                        </a>
+                      </div>
+                    </div>
+                    {selected.resumeFile && (
+                      <div className="mt-6">
+                        <p className="text-zinc-200">Click below to view my resume:</p>
+                        <a href={selected.resumeFile} target="_blank" rel="noopener noreferrer">
+                          <div className="mt-2 flex justify-center">
+                            <img
+                              src={resume}
+                              alt="Resume"
+                              className="w-40 h-55 cursor-pointer rounded-lg shadow-lg bg-white p-2"
+                            />
+                          </div>
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  // Default player layout
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className={`h-2.5 w-2.5 rounded-full ${selected.color ?? "bg-indigo-500"}`} />
+                      <span className="text-lg font-medium">{selected.formal}</span>
+                    </div>
+                    <div className="text-sm text-zinc-200 whitespace-pre-wrap">
+                      {selected.details}
+                    </div>
+                    <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                      <div>
+                        <dt className="text-zinc-400">Dates</dt>
+                        <dd className="text-zinc-100">
+                          {selected?.dates ?? "Add dates in teamData.js"}
+                        </dd>
+                      </div>
+
+                      {/* Only show Tools if not award/leadership */}
+                      {selected?.type !== "org" && (
+                        <div>
+                          <dt className="text-zinc-400">Tools</dt>
+                          <dd className="text-zinc-100">
+                            {selected?.tools ?? "Add tools in teamData.js"}
+                          </dd>
+                        </div>
+                      )}
+                    </dl>
+                    {/* inline, project-only links; shows if either exists */}
+{(selected?.type === "project" || selected?.demo || selected?.github) && (selected?.demo || selected?.github) && (
+  <div className="mt-2 flex flex-wrap gap-2">
+    {selected?.demo && (
+      <a
+        href={selected.demo}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-indigo-600/80 hover:bg-indigo-600 transition text-white text-sm ring-1 ring-white/10"
+      >
+        Demo ↗
+      </a>
+    )}
+    {selected?.github && (
+      <a
+        href={selected.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-zinc-700/80 hover:bg-zinc-700 transition text-white text-sm ring-1 ring-white/10"
+      >
+        GitHub ↗
+      </a>
+    )}
+  </div>
+)}
+                    {"href" in selected && selected.href && (
+                      <a
+                        href={selected.href}
+                        className="inline-flex items-center gap-2 text-indigo-300 hover:text-indigo-200 underline"
+                        target="_blank" rel="noreferrer"
+                      >
+                        Learn more ↗
+                      </a>
+                    )}
+                  </div>
+                )
+              ) : (
+                <div className="text-sm text-zinc-400">
+                  Select a dot on the field to see full details, dates, and tools.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* DEPTH CHART (title ONLY toggles; item select closes; swipe down closes) */}
+      <div
+        className={`absolute bottom-0 left-0 w-full bg-zinc-800/95 p-4 transition-all duration-300 ease-in-out overflow-y-auto border-t-2 border-zinc-800 ${
+          isDepthExpanded
+            ? "h-[75svh] translate-y-0"
+            : "h-[10svh] [@media(min-height:800px)]:h-[15%] translate-y-0"
+        }`}
+        onTouchStart={handleDepthTouchStart}
+        onTouchEnd={handleDepthTouchEnd}
+        style={{ zIndex: 999 }}
+      >
+        <h2
+          className="text-white font-semibold uppercase cursor-pointer text-xl [@media(min-height:800px)]:text-4xl"
+          onClick={() => dispatchDepth({ type: "TOGGLE" })} // title click toggles
+        >
+          Depth Chart
+        </h2>
+
+        {isDepthExpanded && (
+          <div className="mt-2" onClick={(e) => e.stopPropagation()}>
+            <DepthGroup
+              title="Manager - Dlet Habtemariam"
+              items={mDepth.manager}
+              selectedId={selectedId}
+              hoveredId={hoveredId}
+              onSelect={(id) => {
+                setSelectedId(id);
+                dispatchDepth({ type: "SELECT" }); // close chart
+                dispatchInfo({ type: "OPEN" });     // open info
+              }}
+              onHover={setHoveredId}
+            />
+            <DepthGroup
+              title="Forwards — Work Experience"
+              items={mDepth.forwards}
+              selectedId={selectedId}
+              hoveredId={hoveredId}
+              onSelect={(id) => {
+                setSelectedId(id);
+                dispatchDepth({ type: "SELECT" });
+                dispatchInfo({ type: "OPEN" });
+              }}
+              onHover={setHoveredId}
+            />
+            <DepthGroup
+              title="Midfielders — Projects"
+              items={mDepth.midfielders}
+              selectedId={selectedId}
+              hoveredId={hoveredId}
+              onSelect={(id) => {
+                setSelectedId(id);
+                dispatchDepth({ type: "SELECT" });
+                dispatchInfo({ type: "OPEN" });
+              }}
+              onHover={setHoveredId}
+            />
+            <DepthGroup
+              title="Defenders/GK — Orgs & Awards"
+              items={mDepth.defenders}
+              selectedId={selectedId}
+              hoveredId={hoveredId}
+              onSelect={(id) => {
+                setSelectedId(id);
+                dispatchDepth({ type: "SELECT" });
+                dispatchInfo({ type: "OPEN" });
+              }}
+              onHover={setHoveredId}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+
 
   return (
     <div className="relative h-screen w-full bg-zinc-900 text-zinc-100">
@@ -872,7 +1054,10 @@ function DepthGroup({ title, items, onSelect, onHover, selectedId, hoveredId }) 
                   className={`w-full text-left px-2 py-1 rounded-lg flex items-center gap-2 transition ${
                     active ? "bg-white/10 ring-1 ring-yellow-400" : "hover:bg-white/5"
                   }`}
-                  onClick={() => onSelect(p.id)}
+                  onClick={(e) => {
+                    e.stopPropagation(); // don’t toggle chart accidentally
+                    onSelect(p.id);
+                  }}
                   onMouseEnter={() => onHover?.(p.id)}
                   onMouseLeave={() => onHover?.(null)}
                   title={p.details}
@@ -900,6 +1085,7 @@ function DepthGroup({ title, items, onSelect, onHover, selectedId, hoveredId }) 
     </div>
   );
 }
+
 
 function FieldMarkings() {
   return (

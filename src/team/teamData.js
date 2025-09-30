@@ -9,6 +9,7 @@ import dlet from "../assets/logos/dlet.png";
 
 import resume from "../Dlet Habtemariam - Resume.pdf"
 import { label } from "framer-motion/client";
+import { type } from "@testing-library/user-event/dist/type";
 
 export const manager = {
   id: "manager",
@@ -27,6 +28,8 @@ export const manager = {
   x: 85,
   y: 10,
   badge: "MANAGER",
+  linkedin: "https://www.linkedin.com/in/dlet-habtemariam/",
+  github: "https://github.com/dlethab",
 };
 
 
@@ -86,6 +89,7 @@ const FWD_RW_THERMO = {
 // Midfielders = projects (pick 3 for 4-3-3; the 4th shows in other formations)
 const MID_LCM_DIALIN = {
   id: "lcm-dialin",
+  type: "project",
   label: "LCM — Dial In (Project)",
   formal: "Dial In",
   details:
@@ -97,10 +101,13 @@ const MID_LCM_DIALIN = {
   icon: "🎮",
   dates: "April 2024",
   tools: "React, Node, OpenAI API, Python",
+  demo: "https://dialin.fun",
+  github: "https://github.com/dlethab/dial-in",
 };
 
 const MID_CDM_SOCCER_SITE = {
   id: "cdm-soccer-site",
+  type: "project",
   label: "CDM — Soccer Personal Site (Project)",
   formal: "Soccer Personal Site",
   details:
@@ -112,10 +119,13 @@ const MID_CDM_SOCCER_SITE = {
   icon: "⚙️",
   dates: "September 2025",
   tools: "React, TailwindCSS, @dnd-kit, Git",
+  demo: "https://dlethab.github.io",
+  github: "https://github.com/dlethab/dlethab.github.io",
 };
 
 const MID_RCM_UTDNSBE = {
   id: "rcm-utdnsbe",
+  type: "project",
   label: "RCM — UTD NSBE Website (Project)",
   formal: "UTD NSBE Website",
   details:
@@ -127,25 +137,30 @@ const MID_RCM_UTDNSBE = {
   icon: "🌐",
   dates: "2023",
   tools: "Node, JS/TS, Bootstrap/Tailwind",
+  demo: "https://utdnsbe.vercel.app/",
+  github: "https://github.com/DemarcusI/Website",
 };
 
-// 4th midfielder (projects pool)
 const MID_RM_IOS_THEME = {
   id: "rm-ios-theme",
+  type: "project",
   label: "RM — iOS Messages Music Theme (Project)",
   details:
     "• Designed and developed iMessage extension that sets UI theme to artist’s Live Art from Spotify & Apple Music\n\n• Runs theme change protocol when shared music is played in Messages app",
-  x: 78, // used in 4-4-2 / 4-2-3-1 (not in 4-3-3 XI)
+  x: 78,
   y: 44,
   badge: "RM",
   color: "bg-sky-500",
   icon: "🎵",
   dates: "September 2025",
   tools: "SwiftUI, MusicKit, Spotify Web API, Figma",
+  demo: "https://github.com/dlethab",
+  github: "https://github.com/dlethab",
 };
 
 // Defenders/GK = orgs & awards
 const DEF_LB_NSBE_FINANCE = {
+  type: "org",
   id: "lb-nsbe-finance",
   label: "LB — UTD NSBE Finance Chair",
   formal: "UTD NSBE Finance Chair",
@@ -160,6 +175,7 @@ const DEF_LB_NSBE_FINANCE = {
 };
 
 const DEF_LCB_HACKNY = {
+  type: "org",
   id: "lcb-hackny",
   label: "LCB — HackNY Fellow",
   formal: "HackNY Fellow",
@@ -173,6 +189,7 @@ const DEF_LCB_HACKNY = {
 };
 
 const DEF_RCB_NSBE_SENATOR = {
+  type: "org",
   id: "rcb-nsbe-senator",
   label: "RCB — UTD NSBE Senator",
   formal: "UTD NSBE Senator",
@@ -185,7 +202,8 @@ const DEF_RCB_NSBE_SENATOR = {
   dates: "2023 - 2024",
 };
 
-const DEF_RB_TEMP = {
+const DEF_RB_NSBE_MENTOR = {
+  type: "org",
   id: "rb-nsbe-mentor",
   label: "RB — UTD NSBE Mentor",
   formal: "UTD NSBE Mentor",
@@ -199,15 +217,17 @@ const DEF_RB_TEMP = {
 };
 
 const GK_TEMP = {
+  type: "org",
   id: "gk-temp-award",
-  label: "GK — Temporary (Award)",
+  label: "GK - Bug Fixes & Improvements",
   formal: "Temporary (Award)",
-  details: "Placeholder for award/honor.",
+  details: "don't have a 5th award/org right now. gonna use this to track fixes.\n\nNeed to smoothen out transitions.\n\nclean up mobile layout with depth button.\n\nfix fonts and colors to be cohesive\n\nfix company images/logos",
   x: 50,
   y: 90,
   badge: "GK",
   color: "bg-slate-700",
   icon: "🧤",
+  dates: "Ongoing",
 };
 
 export const formation433 = [
@@ -225,7 +245,7 @@ export const formation433 = [
   DEF_LB_NSBE_FINANCE,
   DEF_LCB_HACKNY,
   DEF_RCB_NSBE_SENATOR,
-  DEF_RB_TEMP,
+  DEF_RB_NSBE_MENTOR,
   GK_TEMP,
 ];
 
@@ -277,7 +297,7 @@ export const formation442 = [
   DEF_LB_NSBE_FINANCE,
   DEF_LCB_HACKNY,
   DEF_RCB_NSBE_SENATOR,
-  DEF_RB_TEMP,
+  DEF_RB_NSBE_MENTOR,
 
   // GK
   GK_TEMP,
@@ -301,7 +321,7 @@ export const formation4231 = [
   DEF_LB_NSBE_FINANCE,
   DEF_LCB_HACKNY,
   DEF_RCB_NSBE_SENATOR,
-  DEF_RB_TEMP,
+  DEF_RB_NSBE_MENTOR,
 
   // GK
   GK_TEMP,
