@@ -8,49 +8,68 @@
     <meta name="Dlet's Portfolio" content="Come check out my portfolio!" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/ball.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>🥅______________🥅</title>
+    <title>Dlet's Portfolio!</title>
     <script>
-      let title = "🥅______________🥅"; // The string with goal emojis at both ends
-      let ballEmoji = "⚽"; // The soccer ball emoji
-      let explode = "💥"; // The explosion emoji
-      let i = 1; // Start replacing from the first character (the first underscore)
-      let movingForward = true; // Flag to control forward and backward movement
+      let title = "______________🥅"; // The string with underscores
+let ballEmoji = "⚽";
+let explode = "💥";
+let i = 0; // Start from the first character (before the goal)
+let movingForward = true; // We only move forward
+let changeTitleInterval; // To store the interval
 
-      function changeTitle() {
-        // Convert the title string into an array of characters
-        let titleArray = Array.from(title); // Use Array.from() to preserve emoji integrity
+function changeTitle() {
+    // Convert the title string into an array of characters
+    let titleArray = Array.from(title); // Use Array.from() to preserve emoji integrity
 
-        // Replace the character at index `i` with the soccer ball emoji or explosion emoji
-        if (titleArray[i] === "🥅") {
-          // Replace the goal positions with the explosion emoji
-          titleArray[i] = explode;
-        } else {
-          // Otherwise, place the ball emoji
-          titleArray[i] = ballEmoji;
-        }
+    // If we haven't reached the goal yet, place the ball emoji at the current position
+    if (titleArray[i] === "🥅") {
+        titleArray[i] = explode; // Replace goal with explosion when reached
+        i = 0;
+        clearInterval(changeTitleInterval); // Stop the interval when the title reaches the goal
+        setTimeout(() => {
+            resetTitle(); // Reset the title after 5 seconds
+            startTitleChange(); // Restart the animation after the title reset
+        }, 5000); // Wait for 5 seconds before resetting
+    } else if (titleArray[i] === "_") {
+        titleArray[i] = ballEmoji; // Otherwise, place the ball emoji
+    }
 
-        // Update the title by joining the array back into a string
-        document.title = titleArray.join('');
+    // Update the title by joining the array back into a string
+    document.title = titleArray.join('');
 
-        // Update the `i` value based on the direction (forward or backward)
-        if (movingForward) {
-          i++; // Move forward
-        } else {
-          i--; // Move backward
-        }
+    // Move forward
+    if (movingForward) {
+        i++; // Move forward to the next character
+    }
+}
 
-        // Change direction when reaching the end or the start
-        if (i === title.length-3) {
-          movingForward = false; // Start moving backward when we reach the last position
-        } else if (i === 0) {
-          movingForward = true; // Start moving forward again when we reach the first position
-        }
-      }
+// Function to reset the title
+function resetTitle() {
+    document.title = "Dlet's Portfolio!"; // Reset the title back to the original
+}
 
-      // Run the changeTitle function every 300 milliseconds
-      window.onload = function() {
-        setInterval(changeTitle, 300);
-      };
+// Function to delay the execution
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function startTitleChange() {
+    // Show the title initially and wait for 5 seconds
+    resetTitle();
+    await delay(5000); // Wait 5 seconds before starting the ball animation
+
+    // Run the changeTitle function every 300ms for 10 seconds
+    changeTitleInterval = setInterval(changeTitle, 300);
+
+    // Wait for the ball to hit the goal and explode
+    await delay(5000); // After 5 seconds, the animation stops (goal explodes)
+}
+
+// Start the title changing process on window load
+window.onload = function() {
+    startTitleChange(); // Start the process
+};
+
     </script>
   </head>
   <body>
