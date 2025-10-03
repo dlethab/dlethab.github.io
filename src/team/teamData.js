@@ -6,10 +6,12 @@ import ericssonLogo from "../assets/logos/ericsson.png";
 import chartbeatLogo from "../assets/logos/chartbeat.png";
 import thermoLogo from "../assets/logos/thermofisher.png";
 import dlet from "../assets/logos/dlet.png";
+import hackny from "../assets/logos/hackny.png";
+
 
 import resume from "../Dlet Habtemariam - Resume.pdf"
 import { label } from "framer-motion/client";
-import { type } from "@testing-library/user-event/dist/type";
+
 
 export const manager = {
   id: "manager",
@@ -48,7 +50,7 @@ const FWD_LW_ERICSSON = {
   x: 28,
   y: 26,
   badge: "LW",
-  color: "bg-rose-500",
+  color: "bg-ericsson",
   icon: "🏢",
   logo: ericssonLogo,
 };
@@ -63,7 +65,7 @@ const FWD_ST_CHARTBEAT = {
   x: 50,
   y: 20,
   badge: "ST",
-  color: "bg-indigo-500",
+  color: "bg-blue-950",
   icon: "⚽",
   logo: chartbeatLogo,
   dates: "Summer 2024",
@@ -79,7 +81,7 @@ const FWD_RW_THERMO = {
   x: 72,
   y: 26,
   badge: "RW",
-  color: "bg-emerald-500",
+  color: "bg-red-600",
   icon: "🧪",
   logo: thermoLogo,
   dates: "Summer 2022",
@@ -183,9 +185,10 @@ const DEF_LCB_HACKNY = {
   x: 38,
   y: 70,
   badge: "LCB",
-  color: "bg-violet-600",
+  color: "bg-red-600",
   icon: "🎖️",
   dates: "Summer 2024",
+  logo: hackny,
 };
 
 const DEF_RCB_NSBE_SENATOR = {
