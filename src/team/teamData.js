@@ -7,6 +7,8 @@ import chartbeatLogo from "../assets/logos/chartbeat.png";
 import thermoLogo from "../assets/logos/thermofisher.png";
 import dlet from "../assets/logos/dlet.png";
 import hackny from "../assets/logos/hackny.png";
+import dialin from "../assets/logos/logoMini.png";
+import ball from "../assets/ball.png";
 
 
 import resume from "../Dlet Habtemariam - Resume.pdf"
@@ -65,7 +67,7 @@ const FWD_ST_CHARTBEAT = {
   x: 50,
   y: 20,
   badge: "ST",
-  color: "bg-blue-950",
+  color: "bg-chartbeat",
   icon: "⚽",
   logo: chartbeatLogo,
   dates: "Summer 2024",
@@ -81,7 +83,7 @@ const FWD_RW_THERMO = {
   x: 72,
   y: 26,
   badge: "RW",
-  color: "bg-red-600",
+  color: "bg-thermo",
   icon: "🧪",
   logo: thermoLogo,
   dates: "Summer 2022",
@@ -99,8 +101,9 @@ const MID_LCM_DIALIN = {
   x: 35,
   y: 48,
   badge: "LCM",
-  color: "bg-amber-500",
+  color: "bg-gray-500",
   icon: "🎮",
+  logo: dialin,
   dates: "April 2024",
   tools: "React, Node, OpenAI API, Python",
   demo: "https://dialin.fun",
@@ -119,6 +122,7 @@ const MID_CDM_SOCCER_SITE = {
   badge: "CDM",
   color: "bg-fuchsia-500",
   icon: "⚙️",
+  logo: ball,
   dates: "September 2025",
   tools: "React, TailwindCSS, @dnd-kit, Git",
   demo: "https://dlethab.github.io",
