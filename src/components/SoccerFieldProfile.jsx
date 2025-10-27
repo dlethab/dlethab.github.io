@@ -462,7 +462,7 @@ const DesktopLayout = () => {
 
             {/* Email */}
             <a
-              href={`mailto:${selected.email}`}
+              href={`mailto:dlethab@icloud.com`}
               className="hover:opacity-80"
             >
               <img
@@ -901,7 +901,7 @@ const MobileLayout = () => {
 
                       {/* Email */}
                       <a
-                        href={`mailto:${selected.email}`}
+                        href={`mailto:dlethab@icloud.com`}
                         className="hover:opacity-80"
                       >
                         <img
