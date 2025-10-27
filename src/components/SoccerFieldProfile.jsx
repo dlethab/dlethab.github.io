@@ -19,6 +19,12 @@ import siteLogo from "../assets/logos/dialinlogo.png";
 import resume from "../assets/logos/resumepic.png";
 import rightarrow from "../assets/logos/arrowright.png";
 import leftarrow from "../assets/logos/leftarrow.png";
+import linkedin from "../assets/logos/linkedinlogo.png";
+import email from "../assets/logos/email.png"
+import github from "../assets/logos/githublogo.png"
+import phone from "../assets/logos/phoneicon.png"
+
+
 import { select } from "framer-motion/client";
 
 /**
@@ -438,30 +444,66 @@ const DesktopLayout = () => {
         // Custom layout for manager intro
         <div className="space-y-3">
           <h3 className="text-xl font-semibold text-white">{selected.label}</h3>
+          {/* Icons in a line */}
+          <div className="mt-3 flex gap-4 text-sm">
+            {/* LinkedIn */}
+            <a
+              href={selected.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80"
+            >
+              <img
+                src={linkedin}
+                alt="LinkedIn"
+                className="w-10 h-10"  // Adjust size as needed
+              />
+            </a>
+
+            {/* Email */}
+            <a
+              href={`mailto:${selected.email}`}
+              className="hover:opacity-80"
+            >
+              <img
+                src={email}
+                alt="Email"
+                className="w-10 h-10"   // Adjust size as needed
+              />
+            </a>
+
+            {/* Phone */}
+            <a
+              href={`tel:${selected.phone}`}
+              className="hover:opacity-80"
+            >
+              <img
+                src={phone}
+                alt="Phone"
+                className="w-10 h-10"   // Adjust size as needed
+              />
+            </a>
+            {/* GitHub */}
+            <a
+              href={selected.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80"
+            >
+              <img
+                src={github}
+                alt="GitHub"
+                className="w-10 h-10"   // Adjust size as needed
+              />
+            </a>
+          </div>
+
           <p className="text-sm text-zinc-200">{selected.details}</p>
+          
           <div className="text-sm text-zinc-300">
             <p>{selected.description}</p>
             <p className="mt-2">School: <span className="text-[#006747]">{selected.school}</span></p>
             <p className="mt-1">Graduation Date: <span className="text-[#FF5F00]">{selected.gradDate}</span></p>
-            {/* Text-only links */}
-              <div className="mt-3 flex gap-4 text-sm">
-                <a
-                  href={selected.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 underline"
-                >
-                  LinkedIn
-                </a>
-                <a
-                  href={selected.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-pink-600 hover:text-pink-500 underline"
-                >
-                  GitHub
-                </a>
-              </div>
           </div>
 
           {/* Resume Image */}
@@ -770,7 +812,7 @@ const MobileLayout = () => {
     h-[90%] bg-zinc-800/95 p-4 border-t-2 border-zinc-800
     transform-gpu will-change-transform transition-transform duration-300 ease-in-out
     ${isInfoOpen ? "w-[80%]" : "w-[10%]"}
-    [@media(min-height:800px)]:h-[85%]
+    [@media(min-height:800px)]:h-[75%]
   `}
   // Remove the old onClick that toggled here
   // If you still want "click background of panel to close", use onClick with guard:
@@ -841,29 +883,64 @@ const MobileLayout = () => {
                   // Manager layout
                   <div className="space-y-3">
                     <h3 className="text-xl font-semibold text-white">{selected.label}</h3>
-                    <p className="text-sm text-zinc-200">{selected.details}</p>
+                    {/* Icons in a line */}
+                    <div className="mt-3 flex gap-4 text-sm">
+                      {/* LinkedIn */}
+                      <a
+                        href={selected.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:opacity-80"
+                      >
+                        <img
+                          src={linkedin}
+                          alt="LinkedIn"
+                          className="w-10 h-10"  // Adjust size as needed
+                        />
+                      </a>
+
+                      {/* Email */}
+                      <a
+                        href={`mailto:${selected.email}`}
+                        className="hover:opacity-80"
+                      >
+                        <img
+                          src={email}
+                          alt="Email"
+                          className="w-10 h-10"   // Adjust size as needed
+                        />
+                      </a>
+
+                      {/* Phone */}
+                      <a
+                        href={`tel:${selected.phone}`}
+                        className="hover:opacity-80"
+                      >
+                        <img
+                          src={phone}
+                          alt="Phone"
+                          className="w-10 h-10"   // Adjust size as needed
+                        />
+                      </a>
+                      {/* GitHub */}
+                      <a
+                        href={selected.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:opacity-80"
+                      >
+                        <img
+                          src={github}
+                          alt="GitHub"
+                          className="w-10 h-10"   // Adjust size as needed
+                        />
+                      </a>
+                    </div>
+
                     <div className="text-sm text-zinc-300">
-                      <p>{selected.description}</p>
+                      {/*<p className="mt-2">Seeking Software Engineering opportunities in backend, infrastructure, and full-stack development.</p>*/}
                       <p className="mt-2">School: <span className="text-[#006747]">{selected.school}</span></p>
                       <p className="mt-1">Graduation Date: <span className="text-[#FF5F00]">{selected.gradDate}</span></p>
-                      <div className="mt-3 flex gap-4 text-sm">
-                        <a
-                          href={selected.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-400 hover:text-blue-300 underline"
-                        >
-                          LinkedIn
-                        </a>
-                        <a
-                          href={selected.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-pink-600 hover:text-pink-500 underline"
-                        >
-                          GitHub
-                        </a>
-                      </div>
                     </div>
                     {selected.resumeFile && (
                       <div className="mt-6">
@@ -879,6 +956,10 @@ const MobileLayout = () => {
                         </a>
                       </div>
                     )}
+                    <p className="text-sm text-zinc-200">{selected.details}</p>
+                    <div className="text-sm text-zinc-300">
+                      <p>{selected.description}</p>
+                    </div>
                   </div>
                 ) : (
                   // Default player layout
@@ -909,30 +990,30 @@ const MobileLayout = () => {
                       )}
                     </dl>
                     {/* inline, project-only links; shows if either exists */}
-{(selected?.type === "project" || selected?.demo || selected?.github) && (selected?.demo || selected?.github) && (
-  <div className="mt-2 flex flex-wrap gap-2">
-    {selected?.demo && (
-      <a
-        href={selected.demo}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-indigo-600/80 hover:bg-indigo-600 transition text-white text-sm ring-1 ring-white/10"
-      >
-        Demo ↗
-      </a>
-    )}
-    {selected?.github && (
-      <a
-        href={selected.github}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-zinc-700/80 hover:bg-zinc-700 transition text-white text-sm ring-1 ring-white/10"
-      >
-        GitHub ↗
-      </a>
-    )}
-  </div>
-)}
+                    {(selected?.type === "project" || selected?.demo || selected?.github) && (selected?.demo || selected?.github) && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {selected?.demo && (
+                          <a
+                            href={selected.demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-indigo-600/80 hover:bg-indigo-600 transition text-white text-sm ring-1 ring-white/10"
+                          >
+                            Demo ↗
+                          </a>
+                        )}
+                        {selected?.github && (
+                          <a
+                            href={selected.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 bg-zinc-700/80 hover:bg-zinc-700 transition text-white text-sm ring-1 ring-white/10"
+                          >
+                            GitHub ↗
+                          </a>
+                        )}
+                      </div>
+                    )}
                     {"href" in selected && selected.href && (
                       <a
                         href={selected.href}
@@ -959,7 +1040,7 @@ const MobileLayout = () => {
         className={`absolute bottom-0 left-0 w-full bg-zinc-800/95 p-4 transition-all duration-300 ease-in-out overflow-y-auto border-t-2 border-zinc-800 ${
           isDepthExpanded
             ? "h-[75svh] translate-y-0"
-            : "h-[10svh] [@media(min-height:800px)]:h-[15%] translate-y-0"
+            : "h-[10svh] [@media(min-height:800px)]:h-[25%] translate-y-0"
         }`}
         onTouchStart={handleDepthTouchStart}
         onTouchEnd={handleDepthTouchEnd}
@@ -969,8 +1050,12 @@ const MobileLayout = () => {
           className="text-white font-semibold uppercase cursor-pointer text-xl [@media(min-height:800px)]:text-4xl"
           onClick={() => dispatchDepth({ type: "TOGGLE" })} // title click toggles
         >
-          Depth Chart
+          All Experiences
         </h2>
+        <p className="text-xl text-gray-300 [@media(min-height:800px)]:text-base">
+          (Depth Chart)
+        </p>
+        
 
         {isDepthExpanded && (
           <div className="mt-2" onClick={(e) => e.stopPropagation()}>

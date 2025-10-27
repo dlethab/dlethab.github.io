@@ -21,7 +21,7 @@ export const manager = {
   formal: label,
   details:
     "Hello! Welcome to my interactive portfolio! Click on the player dots to explore different sections, and use the depth chart to see detailed information about my projects, skills, and resume.",
-  description: " A little about me: I love building cool projects, coding, drawing and playing soccer!",
+  description: "I'm currently seeking exciting & challenging new grad roles in software engineering (backend, infrastructure, full-stack). A little about me: I love building cool projects, coding, drawing and playing soccer!",
   school: "University of Texas at Dallas",
   gradDate: "December 2025",
   resumeImage: resume,
