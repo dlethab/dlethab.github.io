@@ -1,1 +1,54 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/ball.png"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="Dlet's Portfolio" content="Come check out my portfolio!"/><link rel="apple-touch-icon" href="/ball.png"/><link rel="manifest" href="/manifest.json"/><title>Dlet's Portfolio!</title><script>let changeTitleInterval,title="______________🥅",ballEmoji="⚽",explode="💥",i=0,movingForward=!0;function changeTitle(){let e=Array.from(title);"🥅"===e[i]?(e[i]=explode,i=0,clearInterval(changeTitleInterval),setTimeout(()=>{resetTitle(),startTitleChange()},5e3)):"_"===e[i]&&(e[i]=ballEmoji),document.title=e.join(""),movingForward&&i++}function resetTitle(){document.title="Dlet's Portfolio!"}function delay(e){return new Promise(t=>setTimeout(t,e))}async function startTitleChange(){resetTitle(),await delay(5e3),changeTitleInterval=setInterval(changeTitle,300),await delay(5e3)}window.onload=function(){startTitleChange()}</script><script defer="defer" src="/static/js/main.af5fcfdc.js"></script><link href="/static/css/main.ecffc15c.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050806" />
+    <meta name="description" content="Dlet Habtemariam — Customer Success Engineer at IBM. An interactive matchday portfolio." />
+    <meta property="og:title" content="Dlet Habtemariam — Matchday Portfolio" />
+    <meta property="og:description" content="Scout the squad: experience, projects and leadership laid out on a 4-3-3. Plus a penalty shootout." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://dlethab.github.io" />
+    <link rel="icon" href="/ball.png" />
+    <link rel="apple-touch-icon" href="/ball.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>Dlet's Portfolio!</title>
+    <script>
+      // Tab title: the ball dribbles toward the goal, scores, then resets.
+      (function () {
+        const BASE = "Dlet's Portfolio!";
+        const TRACK = "______________🥅";
+        let i = 0;
+        let timer;
+
+        function step() {
+          const chars = Array.from(TRACK);
+          if (chars[i] === "🥅") {
+            chars[i] = "💥";
+            document.title = chars.join("");
+            clearInterval(timer);
+            setTimeout(start, 5000);
+            return;
+          }
+          chars[i] = "⚽";
+          document.title = chars.join("");
+          i++;
+        }
+
+        function start() {
+          document.title = BASE;
+          i = 0;
+          setTimeout(() => (timer = setInterval(step, 300)), 5000);
+        }
+
+        window.addEventListener("load", start);
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-jhmDj0v2.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-D0EsDRXI.css">
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
