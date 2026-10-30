@@ -3,10 +3,10 @@ import { AnimatePresence, animate, motion, useMotionValue } from "framer-motion"
 import Header from "./components/Header";
 import Pitch from "./components/Pitch";
 import PlayerCard, { DepthChart } from "./components/PlayerCard";
-import ArchiveDrawer from "./components/ArchiveDrawer";
+import ReservesDrawer from "./components/ReservesDrawer";
 import PenaltyGame from "./components/PenaltyGame";
 import KickoffIntro from "./components/KickoffIntro";
-import { ArchiveIcon, BallIcon, CloseIcon } from "./components/Icons";
+import { BallIcon, CloseIcon, ReservesIcon } from "./components/Icons";
 import { allPlayers, profile, squad } from "./data/content";
 import { play } from "./lib/sound";
 
@@ -44,7 +44,6 @@ function useScrollLock(locked) {
 // scrolled, the swipe scrolls it back to the top first, then pulls the sheet down.
 function MobileSheet({ children, onClose }) {
   const sheetRef = useRef(null);
-  const scrollRef = useRef(null);
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
   const y = useMotionValue(0);
@@ -66,7 +65,7 @@ function MobileSheet({ children, onClose }) {
 
     const onMove = (e) => {
       const cy = e.touches[0].clientY;
-      const atTop = (scrollRef.current?.scrollTop ?? 0) <= 0;
+      const atTop = (sheet.querySelector("[data-card-scroll]")?.scrollTop ?? 0) <= 0;
       if (!dragging && atTop && cy > lastY) {
         dragging = true;
         startY = cy;
@@ -120,7 +119,7 @@ function MobileSheet({ children, onClose }) {
         ref={sheetRef}
         role="dialog"
         aria-modal="true"
-        className="fixed inset-x-0 bottom-0 z-40 flex max-h-[88dvh] flex-col rounded-t-3xl border-t border-white/10 bg-zinc-800 text-zinc-100 shadow-xl"
+        className="fixed inset-x-0 bottom-0 z-40 flex h-[85dvh] flex-col rounded-t-3xl border-t border-white/10 bg-zinc-800 text-zinc-100 shadow-xl"
         style={{ y }}
         initial={{ y: "100%" }}
         animate={{ y: 0 }}
@@ -138,7 +137,7 @@ function MobileSheet({ children, onClose }) {
             <CloseIcon width={16} height={16} />
           </button>
         </div>
-        <div ref={scrollRef} className="overflow-y-auto overscroll-contain px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+        <div className="flex min-h-0 flex-1 flex-col px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
           {children}
         </div>
       </motion.div>
@@ -164,18 +163,18 @@ function MenuTab({ active, onClick, children }) {
 export default function App() {
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [selectedId, setSelectedId] = useState(profile.id);
-  const [archiveOpen, setArchiveOpen] = useState(false);
+  const [reservesOpen, setReservesOpen] = useState(false);
   const [penaltyOpen, setPenaltyOpen] = useState(false);
   const [intro, setIntro] = useState(() => !sessionStorage.getItem(INTRO_KEY));
 
   const selected = BY_ID[selectedId];
   const sheetOpen = !isDesktop && selectedId !== profile.id;
-  const overlayOpen = intro || archiveOpen || penaltyOpen;
+  const overlayOpen = intro || reservesOpen || penaltyOpen;
   useScrollLock(overlayOpen || sheetOpen);
 
   const select = useCallback((id) => {
     setSelectedId(id);
-    setArchiveOpen(false);
+    setReservesOpen(false);
     play("select");
   }, []);
 
@@ -196,7 +195,7 @@ export default function App() {
   useEffect(() => {
     const onKey = (e) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      if (archiveOpen && e.key === "Escape") return setArchiveOpen(false);
+      if (reservesOpen && e.key === "Escape") return setReservesOpen(false);
       if (overlayOpen) return;
       if (e.key === "ArrowRight") step(1);
       else if (e.key === "ArrowLeft") step(-1);
@@ -205,7 +204,7 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [overlayOpen, archiveOpen, step, select]);
+  }, [overlayOpen, reservesOpen, step, select]);
 
   const card = useMemo(
     () => (
@@ -214,27 +213,23 @@ export default function App() {
         onSelect={select}
         onPrev={() => step(-1)}
         onNext={() => step(1)}
-        onArchive={() => setArchiveOpen(true)}
       />
     ),
     [selected, select, step]
   );
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-zinc-900 text-zinc-100">
+    <div className="flex min-h-screen w-full flex-col bg-zinc-900 text-zinc-100 lg:h-screen lg:overflow-hidden">
       <Header onHome={() => select(profile.id)} />
 
-      <main className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-[minmax(0,1fr)] items-start gap-6 p-4 lg:grid-cols-[1.4fr_1fr_0.9fr] lg:p-6">
+      <main className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-[minmax(0,1fr)] items-start gap-6 p-4 lg:min-h-0 lg:grid-cols-[1.4fr_1fr_0.9fr] lg:items-stretch lg:p-6">
         {/* field column */}
-        <div
-          className="mx-auto flex w-full max-w-[520px] flex-col gap-4"
-          style={isDesktop ? { maxWidth: "max(340px, calc((100vh - 230px) * 2 / 3))" } : undefined}
-        >
+        <div className="mx-auto flex w-full max-w-[520px] flex-col gap-4 lg:h-full lg:min-h-0 lg:max-w-none">
           <section className="rounded-3xl border border-white/10 bg-zinc-800/40 px-4 py-3 backdrop-blur">
             <div className="grid grid-cols-3 gap-2">
               <MenuTab active>Squad</MenuTab>
-              <MenuTab onClick={() => setArchiveOpen(true)}>
-                <ArchiveIcon width={15} height={15} /> Archive
+              <MenuTab onClick={() => setReservesOpen(true)}>
+                <ReservesIcon width={15} height={15} /> Reserves
               </MenuTab>
               <MenuTab onClick={() => setPenaltyOpen(true)}>
                 <BallIcon width={15} height={15} /> Penalty
@@ -242,17 +237,21 @@ export default function App() {
             </div>
           </section>
 
-          <Pitch
-            key={intro ? "pre" : "live"}
-            players={squad}
-            selectedId={selectedId}
-            onSelect={select}
-            onManager={() => select(profile.id)}
-            onBall={() => setPenaltyOpen(true)}
-            revealed={!intro}
-          />
+          {/* on desktop the field scales to whatever height is left in the column */}
+          <div className="lg:flex lg:min-h-0 lg:flex-1 lg:justify-center">
+            <Pitch
+              className="lg:aspect-[2/3] lg:h-full lg:max-w-full"
+              key={intro ? "pre" : "live"}
+              players={squad}
+              selectedId={selectedId}
+              onSelect={select}
+              onManager={() => select(profile.id)}
+              onBall={() => setPenaltyOpen(true)}
+              revealed={!intro}
+            />
+          </div>
 
-          <p className="hidden text-center text-xs text-zinc-500 lg:block">
+          <p className="hidden shrink-0 text-center text-xs text-zinc-500 lg:block">
             ← → to browse · Esc for manager · P for a penalty
           </p>
         </div>
@@ -260,9 +259,10 @@ export default function App() {
         {isDesktop ? (
           <>
             {/* selected player column */}
-            <section className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto rounded-3xl border border-white/10 bg-zinc-800/40 p-4 backdrop-blur">
+            <section className="flex min-h-0 flex-col rounded-3xl border border-white/10 bg-zinc-800/40 p-4 backdrop-blur">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
+                  className="flex min-h-0 flex-1 flex-col"
                   key={selectedId}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -275,8 +275,8 @@ export default function App() {
             </section>
 
             {/* depth chart column */}
-            <section className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto rounded-3xl border border-white/10 bg-zinc-800/40 p-4 backdrop-blur">
-              <DepthChart selectedId={selectedId} onSelect={select} onArchive={() => setArchiveOpen(true)} />
+            <section className="panel-scroll min-h-0 overflow-y-auto rounded-3xl border border-white/10 bg-zinc-800/40 p-4 backdrop-blur">
+              <DepthChart selectedId={selectedId} onSelect={select} />
             </section>
           </>
         ) : (
@@ -286,8 +286,7 @@ export default function App() {
               onSelect={select}
               onPrev={() => step(-1)}
               onNext={() => step(1)}
-              onArchive={() => setArchiveOpen(true)}
-              withDepth
+                    withDepth
             />
           </section>
         )}
@@ -296,12 +295,14 @@ export default function App() {
       <AnimatePresence>
         {sheetOpen && (
           <MobileSheet onClose={() => setSelectedId(profile.id)}>
-            <div key={selectedId}>{card}</div>
+            <div key={selectedId} className="flex min-h-0 flex-1 flex-col">
+              {card}
+            </div>
           </MobileSheet>
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {archiveOpen && <ArchiveDrawer onSelect={select} onClose={() => setArchiveOpen(false)} />}
+        {reservesOpen && <ReservesDrawer onSelect={select} onClose={() => setReservesOpen(false)} />}
       </AnimatePresence>
       <AnimatePresence>{penaltyOpen && <PenaltyGame onClose={() => setPenaltyOpen(false)} />}</AnimatePresence>
       <AnimatePresence>{intro && <KickoffIntro onDone={endIntro} />}</AnimatePresence>

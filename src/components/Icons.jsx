@@ -61,10 +61,11 @@ export const SoundIcon = ({ on, ...p }) => (
   </svg>
 );
 
-export const ArchiveIcon = (p) => (
+export const ReservesIcon = (p) => (
   <svg {...base} {...p}>
-    <rect x="3" y="4" width="18" height="5" rx="1" />
-    <path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4" />
+    <circle cx="9" cy="8" r="3.2" />
+    <path d="M3 19.5c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5" />
+    <path d="M15.5 4.9a3.2 3.2 0 0 1 0 6.2M17.5 14.3c2 .7 3.5 2.6 3.5 5.2" />
   </svg>
 );
 

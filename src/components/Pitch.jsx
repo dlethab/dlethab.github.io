@@ -67,14 +67,14 @@ function PlayerDot({ player, selected, onSelect, delay, animate }) {
   );
 }
 
-export default function Pitch({ players, selectedId, onSelect, onManager, onBall, revealed }) {
+export default function Pitch({ players, selectedId, onSelect, onManager, onBall, revealed, className = "" }) {
   const reduce = useReducedMotion();
   const animate = revealed && !reduce;
   const managerActive = selectedId === profile.id;
 
   return (
-    <section className="overflow-hidden rounded-3xl bg-zinc-800/40 shadow-xl ring-1 ring-white/10 backdrop-blur">
-      <div className="relative aspect-[2/3] select-none">
+    <section className={`overflow-hidden rounded-3xl bg-zinc-800/40 shadow-xl ring-1 ring-white/10 backdrop-blur ${className}`}>
+      <div className="relative aspect-[2/3] w-full select-none">
         {/* grass stripes */}
         <div className="absolute inset-0 bg-green-700" />
         {Array.from({ length: 12 }).map((_, i) => (
@@ -131,7 +131,7 @@ export default function Pitch({ players, selectedId, onSelect, onManager, onBall
         ))}
 
         {/* helper bubble */}
-        <div className="pointer-events-none absolute left-[5%] top-[4%] whitespace-nowrap rounded-full bg-black/40 px-3 py-1 text-xs text-white backdrop-blur-md">
+        <div className="pointer-events-none absolute left-[5%] top-[4%] whitespace-nowrap rounded-full bg-black/40 px-3 py-1 text-xs text-white backdrop-blur-md lg:[@media(max-height:820px)]:hidden">
           Click a player to see details
         </div>
       </div>

@@ -17,7 +17,7 @@ export const profile = {
   title: "Customer Success Engineer",
   org: "IBM",
   photo,
-  bio: "Currently helping enterprise teams roll out HashiCorp and IBM Verify at IBM. UT Dallas grad. Outside of work I like to play soccer.",
+  bio: "Currently helping enterprise teams roll out Cloud Infra & Identity at IBM. Outside of work I like to play soccer.",
   hint: "Tap a player to scout my career, or step up and take a penalty.",
   school: "University of Texas at Dallas",
   links: {
@@ -33,6 +33,7 @@ export const LINES = {
   mid: "Midfield · Projects",
   def: "Defence · Leadership",
   gk: "Keeper · Skills",
+  res: "Reserves",
 };
 
 export const squad = [
@@ -247,13 +248,13 @@ export const squad = [
   },
 ];
 
-/* Former squad members: not on the pitch, still worth a look. */
-export const archive = [
+/* Reserves: earlier roles and projects that sit on the bench, not on the pitch. */
+export const reserves = [
   {
     id: "thermo",
     color: "#ffffff",
     line: "fwd",
-    pos: "SUB",
+    pos: "RES",
     name: "Thermo Fisher Scientific",
     role: "Software Engineering Intern",
     dates: "Summer 2022",
@@ -269,7 +270,7 @@ export const archive = [
     id: "davaco",
     color: "#3f3f46",
     line: "fwd",
-    pos: "SUB",
+    pos: "RES",
     name: "Davaco",
     role: "Software Engineering Intern",
     dates: "Feb 2021 – May 2022",
@@ -284,7 +285,7 @@ export const archive = [
     id: "nsbe-site",
     color: "#06b6d4",
     line: "mid",
-    pos: "SUB",
+    pos: "RES",
     name: "UTD NSBE Website",
     role: "Chapter Website",
     dates: "2023",
@@ -297,5 +298,5 @@ export const archive = [
   },
 ];
 
-export const allPlayers = [...squad, ...archive];
+export const allPlayers = [...squad, ...reserves];
 

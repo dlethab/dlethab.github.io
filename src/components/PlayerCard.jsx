@@ -1,6 +1,6 @@
 import Crest from "./Crest";
-import { LINES, profile, squad } from "../data/content";
-import { ChevronIcon, ExternalIcon, FileIcon, GitHubIcon, LinkedInIcon, ArchiveIcon } from "./Icons";
+import { LINES, profile, reserves, squad } from "../data/content";
+import { ChevronIcon, ExternalIcon, FileIcon, GitHubIcon, LinkedInIcon } from "./Icons";
 
 const Heading = ({ children, className = "" }) => (
   <h2 className={`text-sm font-semibold uppercase tracking-wide text-zinc-300 ${className}`}>{children}</h2>
@@ -25,7 +25,7 @@ function LinkButton({ href, children, primary }) {
   );
 }
 
-function ProfileCard({ onSelect, onArchive, withDepth }) {
+function ProfileCard({ onSelect, withDepth }) {
   return (
     <div className="space-y-5">
       <Heading>Manager</Heading>
@@ -61,28 +61,22 @@ function ProfileCard({ onSelect, onArchive, withDepth }) {
 
       {withDepth && (
         <div className="border-t border-white/10 pt-5">
-          <DepthChart onSelect={onSelect} onArchive={onArchive} />
+          <DepthChart onSelect={onSelect} />
         </div>
       )}
     </div>
   );
 }
 
-export function DepthChart({ selectedId, onSelect, onArchive }) {
-  const groups = ["fwd", "mid", "def", "gk"].map((line) => [line, squad.filter((p) => p.line === line)]);
+export function DepthChart({ selectedId, onSelect }) {
+  const groups = [
+    ...["fwd", "mid", "def", "gk"].map((line) => [line, squad.filter((p) => p.line === line)]),
+    ["res", reserves],
+  ];
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Heading>Depth Chart</Heading>
-        <button
-          type="button"
-          onClick={onArchive}
-          className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-zinc-400 transition hover:bg-white/5 hover:text-white"
-        >
-          <ArchiveIcon width={14} height={14} /> Archive
-        </button>
-      </div>
+      <Heading>Depth Chart</Heading>
       <button
         type="button"
         onClick={() => onSelect(profile.id)}
@@ -146,10 +140,10 @@ function SkillsCard({ player }) {
 }
 
 function PlayerDetails({ player }) {
-  const archived = player.pos === "SUB";
+  const reserve = player.pos === "RES";
   return (
     <div className="space-y-4">
-      <Heading>{archived ? "Archive" : "Selected Player"}</Heading>
+      <Heading>{reserve ? "Reserves" : "Selected Player"}</Heading>
 
       {/* logo tile */}
       <div className="flex h-44 items-center justify-center rounded-2xl bg-white/5 p-3 ring-1 ring-white/20">
@@ -215,16 +209,18 @@ function PlayerDetails({ player }) {
   );
 }
 
-export default function PlayerCard({ player, onSelect, onPrev, onNext, onArchive, withDepth = false }) {
+export default function PlayerCard({ player, onSelect, onPrev, onNext, withDepth = false }) {
   const isProfile = player.id === profile.id;
 
   return (
-    <article className="flex h-full flex-col">
-      <div className="flex-1">
-        {isProfile ? <ProfileCard onSelect={onSelect} onArchive={onArchive} withDepth={withDepth} /> : <PlayerDetails player={player} />}
+    // Only the content area scrolls; the Prev/Next bar stays pinned below it so it never moves
+    // between cards of different lengths (when the parent gives the card a fixed height).
+    <article className="flex min-h-0 flex-1 flex-col">
+      <div data-card-scroll className="panel-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain">
+        {isProfile ? <ProfileCard onSelect={onSelect} withDepth={withDepth} /> : <PlayerDetails player={player} />}
       </div>
 
-      <nav className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
+      <nav className="mt-4 flex shrink-0 items-center justify-between border-t border-white/10 pt-4">
         <button
           type="button"
           onClick={onPrev}

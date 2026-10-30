@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import Crest from "./Crest";
-import { archive } from "../data/content";
+import { reserves } from "../data/content";
 import { CloseIcon } from "./Icons";
 
-export default function ArchiveDrawer({ onSelect, onClose }) {
+export default function ReservesDrawer({ onSelect, onClose }) {
   return (
     <motion.div
       className="fixed inset-0 z-50 flex touch-none items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center"
@@ -15,7 +15,7 @@ export default function ArchiveDrawer({ onSelect, onClose }) {
       <motion.div
         role="dialog"
         aria-modal="true"
-        aria-label="Archive"
+        aria-label="Reserves"
         className="w-full max-w-md touch-auto rounded-t-3xl border border-white/10 bg-zinc-800/95 p-5 text-zinc-100 shadow-xl backdrop-blur sm:m-4 sm:rounded-3xl"
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -24,7 +24,7 @@ export default function ArchiveDrawer({ onSelect, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-300">Bench / Archive</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-300">Reserves</h2>
           <button
             type="button"
             onClick={onClose}
@@ -35,7 +35,7 @@ export default function ArchiveDrawer({ onSelect, onClose }) {
           </button>
         </div>
         <ul className="mt-4 space-y-1.5">
-          {archive.map((p) => (
+          {reserves.map((p) => (
             <li key={p.id}>
               <button
                 type="button"
@@ -49,7 +49,7 @@ export default function ArchiveDrawer({ onSelect, onClose }) {
                     {p.role} · {p.dates}
                   </span>
                 </span>
-                <span className="rounded-full bg-black/50 px-1.5 py-0.5 text-[10px] text-white">SUB</span>
+                <span className="rounded-full bg-black/50 px-1.5 py-0.5 text-[10px] text-white">RES</span>
               </button>
             </li>
           ))}

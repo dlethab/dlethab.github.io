@@ -1,7 +1,7 @@
 import { profile } from "../data/content";
 import { useSound } from "../lib/sound";
 import { useBest } from "../lib/score";
-import dialin from "../assets/logos/dialin.png";
+import ball from "../assets/ball.png";
 import { FileIcon, GitHubIcon, LinkedInIcon, SoundIcon } from "./Icons";
 
 const iconBtn = "grid h-9 w-9 place-items-center rounded-lg bg-white/5 text-zinc-200 transition hover:bg-white/10 hover:text-white";
@@ -24,12 +24,10 @@ export default function Header({ onHome }) {
   const best = useBest();
 
   return (
-    <header className="mx-auto w-full max-w-7xl px-4 pt-4 lg:px-6 lg:pt-6">
+    <header className="mx-auto w-full max-w-7xl shrink-0 px-4 pt-4 lg:px-6 lg:pt-6">
       <div className="flex items-center justify-between gap-3 rounded-3xl border border-white/10 bg-zinc-800/40 px-4 py-3 backdrop-blur">
         <button type="button" onClick={onHome} className="flex items-center gap-3 text-left">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-blue-600 p-1.5 ring-2 ring-white/20">
-            <img src={dialin} alt="" className="h-full w-full rounded-full object-contain" />
-          </span>
+          <img src={ball} alt="" className="h-11 w-11 shrink-0 drop-shadow transition-transform duration-500 hover:rotate-[200deg]" />
           <span>
             <span className="block text-lg font-semibold leading-tight text-white">{profile.name}</span>
             <span className="block text-sm text-zinc-400">
